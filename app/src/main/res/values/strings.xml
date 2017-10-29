@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Food4Fit</string>
+    <string name="title_today">Today</string>
+    <string name="title_explore">Explore</string>
+    <string name="title_cook">Cook</string>
+    <string name="title_shop">Shop</string>
+</resources>
