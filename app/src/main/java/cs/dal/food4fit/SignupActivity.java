@@ -1,12 +1,18 @@
 package cs.dal.food4fit;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.HashMap;
 
 /**
  * Created by Mihyar on 11/7/2017.
@@ -15,8 +21,10 @@ import android.widget.Toast;
 
 public class SignupActivity extends AppCompatActivity {
 
+    private FirebaseAuth mAuth;
+    private MyApplicationData appState;
+    private static final String TAG = "SignupActivity";
     Button signupButton     = (Button) findViewById(R.id.btn_signup);
-//    TextView _loginLink     = (TextView) findViewById(R.id.link_login);
     TextView _nameText      = (TextView) findViewById(R.id.input_name);
     TextView _passwordText  = (TextView) findViewById(R.id.input_password);
     TextView _emailText     = (TextView) findViewById(R.id.input_email);
@@ -25,14 +33,32 @@ public class SignupActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        appState = ((MyApplicationData) getApplicationContext());
+        mAuth = FirebaseAuth.getInstance();
     }
 
     public void signup(View view){
+        Log.d(TAG, "Create Account");
         if (!validate()) {
             Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
             signupButton.setEnabled(true);
             return;
         }
+
+        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Creating Account...");
+        progressDialog.show();
+
+        String name = _nameText.getText().toString();
+        String email = _emailText.getText().toString();
+        String password = _passwordText.getText().toString();
+
+        HashMap<String, Object> User = new HashMap<>();
+        User.put("email", email);
+        User.put("name", name);
+        User.put("password", password);
+
     }
 
     public boolean validate(){
