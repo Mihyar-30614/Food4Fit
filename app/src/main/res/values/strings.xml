@@ -4,4 +4,9 @@
     <string name="title_explore">Explore</string>
     <string name="title_cook">Cook</string>
     <string name="title_shop">Shop</string>
+    <string name="goLogin">Already a member? Login</string>
+    <string name="input_name">Name</string>
+    <string name="input_email">Email</string>
+    <string name="input_password">Password</string>
+    <string name="button_signup">Create Account</string>
 </resources>
