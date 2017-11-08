@@ -21,7 +21,6 @@ import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
     private MyApplicationData appState;
     private static final String TAG = "SignupActivity";
     Button signupButton     = (Button) findViewById(R.id.btn_signup);
@@ -34,7 +33,6 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         appState = ((MyApplicationData) getApplicationContext());
-        mAuth = FirebaseAuth.getInstance();
     }
 
     public void signup(View view){
@@ -54,11 +52,15 @@ public class SignupActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
+        String UserID = appState.firebaseReference.push().getKey();
         HashMap<String, Object> User = new HashMap<>();
+        User.put("ID",UserID);
         User.put("email", email);
         User.put("name", name);
         User.put("password", password);
 
+        appState.firebaseReference.child("Users").child(UserID).setValue(User);
+        finish();
     }
 
     public boolean validate(){
