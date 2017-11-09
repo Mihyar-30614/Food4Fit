@@ -29,37 +29,34 @@ public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
     private FirebaseAuth mAuth;
     Button signupButton;
-//    TextView _nameText, _passwordText, _emailText;
-    TextView _passwordText, _emailText;
+    ProgressDialog progressDialog;
+    TextView passwordText, emailText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        signupButton     = (Button) findViewById(R.id.btn_signup);
-//        _nameText      = (TextView) findViewById(R.id.input_name);
-        _passwordText  = (TextView) findViewById(R.id.input_password);
-        _emailText     = (TextView) findViewById(R.id.input_email);
-        mAuth = FirebaseAuth.getInstance();
+        signupButton   = (Button) findViewById(R.id.btn_signup);
+        passwordText  = (TextView) findViewById(R.id.input_password);
+        emailText     = (TextView) findViewById(R.id.input_email);
+        mAuth          = FirebaseAuth.getInstance();
     }
 
-    public void signup(View view){
+    public void signup(final View view){
         Log.d(TAG, "Create Account");
         if (!validate()) {
             Toast.makeText(getBaseContext(), "Account Creation Failed", Toast.LENGTH_LONG).show();
-            signupButton.setEnabled(true);
             return;
         }
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this);
+        progressDialog = new ProgressDialog(SignupActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
-//        String name = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        String email    = emailText.getText().toString();
+        String password = passwordText.getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
@@ -69,10 +66,11 @@ public class SignupActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            goLogin(view);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignupActivity.this, "Authentication failed.",
+                            Toast.makeText(SignupActivity.this, "User Already Exists.",
                                     Toast.LENGTH_SHORT).show();
                         }
                         progressDialog.hide();
@@ -81,30 +79,22 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public boolean validate(){
-        boolean valid = true;
-//        String name = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
-
-//        if (name.isEmpty() || name.length() < 3) {
-//            _nameText.setError("at least 3 characters");
-//            valid = false;
-//        } else {
-//            _nameText.setError(null);
-//        }
+        boolean valid   = true;
+        String email    = emailText.getText().toString();
+        String password = passwordText.getText().toString();
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
+            emailText.setError("enter a valid email address");
             valid = false;
         } else {
-            _emailText.setError(null);
+            emailText.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("between 4 and 10 characters");
+            passwordText.setError("between 4 and 10 characters");
             valid = false;
         } else {
-            _passwordText.setError(null);
+            passwordText.setError(null);
         }
         return valid;
     }
