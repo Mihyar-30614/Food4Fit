@@ -52,6 +52,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:text="@string/goSingup"
+            android:clickable="true"
+            android:onClick="goSignup"
+            android:focusable="true"
             android:gravity="center"
             android:textSize="16sp"/>
 
