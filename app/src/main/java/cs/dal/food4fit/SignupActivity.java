@@ -21,18 +21,20 @@ import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private MyApplicationData appState;
     private static final String TAG = "SignupActivity";
-    Button signupButton     = (Button) findViewById(R.id.btn_signup);
-    TextView _nameText      = (TextView) findViewById(R.id.input_name);
-    TextView _passwordText  = (TextView) findViewById(R.id.input_password);
-    TextView _emailText     = (TextView) findViewById(R.id.input_email);
+    Button signupButton;
+//    TextView _nameText, _passwordText, _emailText;
+    TextView _passwordText, _emailText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        appState = ((MyApplicationData) getApplicationContext());
+
+        signupButton     = (Button) findViewById(R.id.btn_signup);
+//        _nameText      = (TextView) findViewById(R.id.input_name);
+        _passwordText  = (TextView) findViewById(R.id.input_password);
+        _emailText     = (TextView) findViewById(R.id.input_email);
     }
 
     public void signup(View view){
@@ -48,33 +50,23 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
-        String name = _nameText.getText().toString();
+//        String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-
-        String UserID = appState.firebaseReference.push().getKey();
-        HashMap<String, Object> User = new HashMap<>();
-        User.put("ID",UserID);
-        User.put("email", email);
-        User.put("name", name);
-        User.put("password", password);
-
-        appState.firebaseReference.child("Users").child(UserID).setValue(User);
-        finish();
     }
 
     public boolean validate(){
         boolean valid = true;
-        String name = _nameText.getText().toString();
+//        String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        if (name.isEmpty() || name.length() < 3) {
-            _nameText.setError("at least 3 characters");
-            valid = false;
-        } else {
-            _nameText.setError(null);
-        }
+//        if (name.isEmpty() || name.length() < 3) {
+//            _nameText.setError("at least 3 characters");
+//            valid = false;
+//        } else {
+//            _nameText.setError(null);
+//        }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _emailText.setError("enter a valid email address");
