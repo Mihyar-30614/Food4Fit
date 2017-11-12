@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class forgotActivity extends AppCompatActivity {
 
+    // Declare Page Content
     private static final String TAG = "forgotActivity";
     private FirebaseAuth mAuth;
     TextView emailText, resetFail;
@@ -31,24 +32,30 @@ public class forgotActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot);
 
+        // Initialize Page Content
         emailText = (TextView) findViewById(R.id.input_email_reset);
         resetFail = (TextView) findViewById(R.id.text_resetFail);
         btn_reset = (Button)   findViewById(R.id.btn_reset);
         mAuth     = FirebaseAuth.getInstance();
     }
 
+    // Password Reset Functionality
     public void resetPassword (View view){
         final String email    = emailText.getText().toString();
         mAuth.sendPasswordResetEmail(email).addOnCompleteListener(forgotActivity.this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+                    // Reset Success, Show message then go to login page
                     Log.d(TAG, "ResetEmail:success");
                     Toast.makeText(forgotActivity.this, "Reset Link was sent to " + email,
                             Toast.LENGTH_SHORT).show();
+                    // Show Text that Sending Failed
                     resetFail.setVisibility(View.INVISIBLE);
+                    // Call Login Page
                     goLogin();
                 }else{
+                    // Reset Fail, Show Text that send Failed
                     Log.d(TAG, "ResetEmail:failure");
                     resetFail.setVisibility(View.VISIBLE);
                 }
@@ -56,6 +63,7 @@ public class forgotActivity extends AppCompatActivity {
         });
     }
 
+    // Move to Login Page
     public void goLogin(){
         Intent login = new Intent(this,LoginActivity.class);
         startActivity(login);

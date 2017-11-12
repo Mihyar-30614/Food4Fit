@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
  */
 
 public class LoginActivity extends AppCompatActivity{
+    // Declare Page Content
     private static final String TAG = "LoginActivity";
     private FirebaseAuth mAuth;
     ProgressDialog progressDialog;
@@ -34,6 +35,7 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Initialize Page Content
         loginButton   = (Button) findViewById(R.id.btn_login);
         passwordText  = (TextView) findViewById(R.id.input_password);
         emailText     = (TextView) findViewById(R.id.input_email);
@@ -41,27 +43,32 @@ public class LoginActivity extends AppCompatActivity{
         mAuth          = FirebaseAuth.getInstance();
     }
 
+    // Login Functionality
     public void login (View view){
         Log.d(TAG, "Login");
 
+        // Show Progress Dialog
         progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
+        // Get the content of the input
         String email    = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
+        // call login function
         userLogin(email, password);
     }
 
+    // Login function
     private void userLogin(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success, go to Home Page
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Intent homePage = new Intent(LoginActivity.this,MainActivity.class);
@@ -73,16 +80,19 @@ public class LoginActivity extends AppCompatActivity{
                                     Toast.LENGTH_SHORT).show();
                             forgotText.setVisibility(View.VISIBLE);
                         }
+                        // Hide Progress Dialog
                         progressDialog.hide();
                     }
                 });
     }
 
+    // Go to Signup page
     public void goSignup(View view){
         Intent signup_page = new Intent(this,LoginActivity.class);
         startActivity(signup_page);
     }
 
+    // Go to Password Reset Page
     public void forgotPassword (View view){
         Intent forgot_page = new Intent(this, forgotActivity.class);
         startActivity(forgot_page);

@@ -26,6 +26,7 @@ import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
 
+    // Declare page content
     private static final String TAG = "SignupActivity";
     private FirebaseAuth mAuth;
     Button signupButton;
@@ -37,6 +38,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
+        // Initialize page content
         signupButton   = (Button) findViewById(R.id.btn_signup);
         passwordText  = (TextView) findViewById(R.id.input_password);
         emailText     = (TextView) findViewById(R.id.input_email);
@@ -45,27 +47,32 @@ public class SignupActivity extends AppCompatActivity {
 
     public void signup(final View view){
         Log.d(TAG, "Create Account");
+        // Check if the input is valid
         if (!validate()) {
             Toast.makeText(getBaseContext(), "Account Creation Failed", Toast.LENGTH_LONG).show();
             return;
         }
 
+        // Show a progress Dialog
         progressDialog = new ProgressDialog(SignupActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
+        // Get the content of the input
         String email    = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
+        // Create new user
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success, Send Verification E-Mail then go to sign in page
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            sendEmailVerification(user);
                             goLogin(view);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -73,16 +80,20 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.makeText(SignupActivity.this, "User Already Exists.",
                                     Toast.LENGTH_SHORT).show();
                         }
+                        // Hide the progress dialog
                         progressDialog.hide();
                     }
                 });
     }
 
+    // Validate input against listed rules
     public boolean validate(){
+        // Get the value in the input
         boolean valid   = true;
         String email    = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
+        // Validate E-Mail
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailText.setError("enter a valid email address");
             valid = false;
@@ -90,6 +101,7 @@ public class SignupActivity extends AppCompatActivity {
             emailText.setError(null);
         }
 
+        // Validate Password
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
             passwordText.setError("between 4 and 10 characters");
             valid = false;
@@ -99,8 +111,32 @@ public class SignupActivity extends AppCompatActivity {
         return valid;
     }
 
+    // Go to Login Page
     public void goLogin(View view){
         Intent login = new Intent(this,LoginActivity.class);
         startActivity(login);
+    }
+
+    // Send Verification E-Mail
+    private void sendEmailVerification(final FirebaseUser user) {
+
+        user.sendEmailVerification()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            // E-Mail sent successfully
+                            Toast.makeText(SignupActivity.this,
+                                    "Verification email sent to " + user.getEmail(),
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Failure to send E-Mail
+                            Log.e(TAG, "sendEmailVerification", task.getException());
+                            Toast.makeText(SignupActivity.this,
+                                    "Failed to send verification email.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }
