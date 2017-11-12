@@ -71,8 +71,15 @@ public class LoginActivity extends AppCompatActivity{
                             // Sign in success, go to Home Page
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Intent homePage = new Intent(LoginActivity.this,MainActivity.class);
-                            startActivity(homePage);
+                            if (user.isEmailVerified()){
+                                // If User is Verified, go to Home Page
+                                Intent homePage = new Intent(LoginActivity.this,MainActivity.class);
+                                startActivity(homePage);
+                            }else{
+                                // If User is not Verified, Show text to the user
+                                forgotText.setText("Email is not verified, please verify your email");
+                                forgotText.setVisibility(View.VISIBLE);
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
