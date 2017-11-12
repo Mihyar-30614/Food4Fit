@@ -11,4 +11,7 @@
     <string name="button_signup">Create Account</string>
     <string name="goSingup">No account yet? Create one</string>
     <string name="button_login">Login</string>
+    <string name="link_forgot">Forgot Password?</string>
+    <string name="button_reset">Reset Password</string>
+    <string name="text_resetFail">E-Mail Address Does Not Exist</string>
 </resources>

@@ -59,5 +59,19 @@
             android:gravity="center"
             android:textSize="16sp"/>
 
+        <TextView
+            android:id="@+id/link_forgot"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:onClick="forgotPassword"
+            android:text="@string/link_forgot"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="16sp"
+            android:visibility="invisible" />
+
     </LinearLayout>
 </ScrollView>

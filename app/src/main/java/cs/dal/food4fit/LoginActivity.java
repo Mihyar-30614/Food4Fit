@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
     ProgressDialog progressDialog;
     Button loginButton;
-    TextView passwordText, emailText;
+    TextView passwordText, emailText, forgotText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity{
         loginButton   = (Button) findViewById(R.id.btn_login);
         passwordText  = (TextView) findViewById(R.id.input_password);
         emailText     = (TextView) findViewById(R.id.input_email);
+        forgotText    = (TextView) findViewById(R.id.link_forgot);
         mAuth          = FirebaseAuth.getInstance();
     }
 
@@ -70,6 +71,7 @@ public class LoginActivity extends AppCompatActivity{
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Incorrect Email or Password.",
                                     Toast.LENGTH_SHORT).show();
+                            forgotText.setVisibility(View.VISIBLE);
                         }
                         progressDialog.hide();
                     }
@@ -79,5 +81,10 @@ public class LoginActivity extends AppCompatActivity{
     public void goSignup(View view){
         Intent signup_page = new Intent(this,LoginActivity.class);
         startActivity(signup_page);
+    }
+
+    public void forgotPassword (View view){
+        Intent forgot_page = new Intent(this, forgotActivity.class);
+        startActivity(forgot_page);
     }
 }
