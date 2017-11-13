@@ -113,8 +113,8 @@ public class SignupActivity extends AppCompatActivity {
 
     // Go to Login Page
     public void goLogin(View view){
-        Intent login = new Intent(this,LoginActivity.class);
-        startActivity(login);
+        startActivity(new Intent(this,LoginActivity.class));
+        finish();
     }
 
     // Send Verification E-Mail
@@ -138,5 +138,12 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(SignupActivity.this, MainActivity.class));
+        finish();
     }
 }

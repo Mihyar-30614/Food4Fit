@@ -136,8 +136,8 @@ public class LoginActivity extends AppCompatActivity{
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user.isEmailVerified()){
                                 // If User is Verified, go to Home Page
-                                Intent homePage = new Intent(LoginActivity.this,MainActivity.class);
-                                startActivity(homePage);
+                                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                                finish();
                             }else{
                                 // If User is not Verified, Show text to the user
                                 forgotText.setText("Email is not verified, please verify your email");
@@ -158,14 +158,14 @@ public class LoginActivity extends AppCompatActivity{
 
     // Go to Signup page
     public void goSignup(View view){
-        Intent signup_page = new Intent(this,SignupActivity.class);
-        startActivity(signup_page);
+        startActivity(new Intent(this,SignupActivity.class));
+        finish();
     }
 
     // Go to Password Reset Page
     public void forgotPassword (View view){
-        Intent forgot_page = new Intent(this, forgotActivity.class);
-        startActivity(forgot_page);
+        startActivity(new Intent(this, ForgotActivity.class));
+        finish();
     }
 
     // Handling Facebook token
@@ -181,8 +181,8 @@ public class LoginActivity extends AppCompatActivity{
                             // Sign in success, Go Home Page
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Intent homePage = new Intent(LoginActivity.this,MainActivity.class);
-                            startActivity(homePage);
+                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -191,5 +191,12 @@ public class LoginActivity extends AppCompatActivity{
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();
     }
 }
