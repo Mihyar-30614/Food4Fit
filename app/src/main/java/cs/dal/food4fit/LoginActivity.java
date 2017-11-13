@@ -2,20 +2,32 @@ package cs.dal.food4fit;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by Mihyar on 11/7/2017.
@@ -28,19 +40,66 @@ public class LoginActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
     ProgressDialog progressDialog;
     Button loginButton;
+    LoginButton facebookLoginButton;
+    CallbackManager callbackManager;
     TextView passwordText, emailText, forgotText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        // Generate Signature code
+        /*try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "cs.dal.food4fit",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
 
+        } catch (NoSuchAlgorithmException e) {
+
+        }
+        */
         // Initialize Page Content
-        loginButton   = (Button) findViewById(R.id.btn_login);
+        loginButton   = (Button)   findViewById(R.id.btn_login);
         passwordText  = (TextView) findViewById(R.id.input_password);
         emailText     = (TextView) findViewById(R.id.input_email);
         forgotText    = (TextView) findViewById(R.id.link_forgot);
         mAuth          = FirebaseAuth.getInstance();
+
+        facebookLoginButton = (LoginButton) findViewById(R.id.login_button);
+        facebookLoginButton .setReadPermissions("email");
+        callbackManager = CallbackManager.Factory.create();
+        // Callback registration
+
+        facebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                String token = loginResult.getAccessToken().getToken();
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+               // App code
+            }
+        });
+    }
+
+    // Facebook Login Result return
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
     }
 
     // Login Functionality

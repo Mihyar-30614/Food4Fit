@@ -3,6 +3,8 @@
 buildscript {
     repositories {
         jcenter()
+        // Facebook login SDK
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.0'

@@ -14,4 +14,7 @@
     <string name="link_forgot">Forgot Password?</string>
     <string name="button_reset">Reset Password</string>
     <string name="text_resetFail">E-Mail Address Does Not Exist</string>
+    <string name="facebook_app_id">131914217512811</string>
+    <string name="fb_login_protocol_scheme">fb131914217512811</string>
+
 </resources>
