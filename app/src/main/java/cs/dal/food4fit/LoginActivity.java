@@ -158,7 +158,7 @@ public class LoginActivity extends AppCompatActivity{
 
     // Go to Signup page
     public void goSignup(View view){
-        Intent signup_page = new Intent(this,LoginActivity.class);
+        Intent signup_page = new Intent(this,SignupActivity.class);
         startActivity(signup_page);
     }
 
