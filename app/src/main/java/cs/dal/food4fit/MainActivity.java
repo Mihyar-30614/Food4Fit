@@ -52,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         // Edits By Mihyar
-        btn_signup = (Button)findViewById(R.id.button2);
+        btn_signup = (Button)findViewById(R.id.user);
     }
     public void goSignup (View view){
-        startActivity(new Intent(this,SignupActivity.class));
+        startActivity(new Intent(this,LoginActivity.class));
         finish();
     }
 
