@@ -2,14 +2,17 @@ package cs.dal.food4fit;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import java.util.ArrayList;
@@ -45,6 +48,24 @@ public class ExploreFragment extends Fragment {
         gridView = (GridView) view.findViewById(R.id.gridView);
         gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, getData());
         gridView.setAdapter(gridAdapter);
+
+        //add 20171120 by Grace and it need to be pushed
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick (AdapterView< ? > parent, View v, int position, long id){
+
+                ImageItem item = (ImageItem) parent.getItemAtPosition(position);
+
+                //Create intent
+                Intent intent = new Intent(getActivity(), RecipeActivity.class);
+//                intent.putExtra("title", item.getTitle());
+//                intent.putExtra("image", item.getImage());
+
+                Log.i("a",item.getTitle());
+
+                startActivity(intent);
+
+            }
+        });
 
         return view;
 
