@@ -50,17 +50,12 @@ public class MainActivity extends AppCompatActivity {
                     ExploreFragment exploreFragment = new ExploreFragment();
                     android.support.v4.app.FragmentTransaction exploreTransction = getSupportFragmentManager().beginTransaction();
                     exploreTransction.replace(R.id.content, exploreFragment).commit();
-
-
-
-
                     return true;
                 case R.id.navigation_cook:
                     mTextMessage.setText(R.string.title_cook);
                     CookFragment cookFragment = new CookFragment();
                     android.support.v4.app.FragmentTransaction cookTransction = getSupportFragmentManager().beginTransaction();
                     cookTransction.replace(R.id.content, cookFragment).commit();
-
                     return true;
                 case R.id.navigation_shop:
                     mTextMessage.setText(R.string.title_shop);
@@ -86,10 +81,6 @@ public class MainActivity extends AppCompatActivity {
         btn_signup = (Button)findViewById(R.id.user);
 
 
-        context = this;
-        gridView = (GridView) findViewById(R.id.gridView);
-        gridAdapter = new GridViewAdapter(context, R.layout.grid_item_layout, getData());
-        gridView.setAdapter(gridAdapter);
 
     }
 
@@ -99,15 +90,6 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    private ArrayList<ImageItem> getData() {
-        final ArrayList<ImageItem> imageItems = new ArrayList<>();
-        TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
-        for (int i = 0; i < imgs.length(); i++) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
-            imageItems.add(new ImageItem(bitmap, "Image#" + i));
-        }
-        return imageItems;
-    }
 
 
 
