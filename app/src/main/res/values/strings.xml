@@ -19,4 +19,21 @@
     <string name="settings_profile">Profile</string>
     <string name="settings_signout">Sign Out</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string-array name="image_ids">
+        <item>@drawable/n1</item>
+        <item>@drawable/n2</item>
+        <item>@drawable/n3</item>
+        <item>@drawable/n4</item>
+        <item>@drawable/n5</item>
+        <item>@drawable/n6</item>
+        <item>@drawable/n7</item>
+        <item>@drawable/n8</item>
+
+
+    </string-array>
+
 </resources>
