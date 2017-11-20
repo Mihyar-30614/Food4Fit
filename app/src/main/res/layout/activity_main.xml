@@ -20,8 +20,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:background="@drawable/setting"
-            android:onClick="goSignup" />
+            android:background="@drawable/setting" />
 
         <TextView
             android:id="@+id/message"
@@ -40,9 +39,14 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:background="@drawable/account"
-            android:gravity="center" />
+            android:gravity="center"
+            android:onClick="goSignup" />
     </LinearLayout>
 
+    <android.support.v4.widget.DrawerLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/sideMenu">
 
     <FrameLayout
         android:id="@+id/content"
@@ -52,6 +56,13 @@
 
 
     </FrameLayout>
+    <!-- The navigation drawer -->
+    <android.support.design.widget.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/settings"/>
+    </android.support.v4.widget.DrawerLayout>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
@@ -60,5 +71,4 @@
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation" />
-
 </LinearLayout>
