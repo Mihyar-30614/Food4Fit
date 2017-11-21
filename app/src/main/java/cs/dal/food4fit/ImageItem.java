@@ -9,15 +9,21 @@ import android.graphics.Bitmap;
 public class ImageItem {
     private Bitmap image;
     private String title;
+    private int imageID;
 
-    public ImageItem(Bitmap image, String title) {
+    public ImageItem(Bitmap image, String title, int imageID) {
         super();
         this.image = image;
         this.title = title;
+        this.imageID = imageID;
     }
 
     public Bitmap getImage() {
         return image;
+    }
+
+    public int getImageID() {
+        return imageID;
     }
 
     public void setImage(Bitmap image) {
