@@ -25,7 +25,7 @@
             app:titleEnabled="false">
 
             <ImageView
-                android:id="@+id/htab_header"
+                android:id="@+id/headerImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/n2"
@@ -66,8 +66,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 app:tabIndicatorColor="@android:color/white"
-                app:tabSelectedTextColor="@android:color/darker_gray"
-                app:tabTextColor="@android:color/white" />
+                app:tabSelectedTextColor="@android:color/white"
+                app:tabTextColor="@android:color/darker_gray" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

@@ -49,7 +49,7 @@ public class ExploreFragment extends Fragment {
         gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, getData());
         gridView.setAdapter(gridAdapter);
 
-        //add 20171120 by Grace and it need to be pushed
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick (AdapterView< ? > parent, View v, int position, long id){
 
@@ -57,10 +57,8 @@ public class ExploreFragment extends Fragment {
 
                 //Create intent
                 Intent intent = new Intent(getActivity(), RecipeActivity.class);
-//                intent.putExtra("title", item.getTitle());
-//                intent.putExtra("image", item.getImage());
 
-                Log.i("a",item.getTitle());
+                intent.putExtra("imageID", item.getImageID());
 
                 startActivity(intent);
 
@@ -77,7 +75,7 @@ public class ExploreFragment extends Fragment {
         TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
         for (int i = 0; i < imgs.length(); i++) {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
-            imageItems.add(new ImageItem(bitmap, "Image#" + i));
+            imageItems.add(new ImageItem(bitmap, "Image#" + i,imgs.getResourceId(i, -1)));
         }
         return imageItems;
     }
