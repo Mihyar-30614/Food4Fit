@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
     private DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
+    SharedPreferences sharedPreferences;
     boolean slideOpen;
     Button btn_signup;
 
@@ -86,6 +88,15 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         // Edits By Mihyar
         btn_signup = (Button) findViewById(R.id.user);
+        sharedPreferences = this.getSharedPreferences("Login", MODE_PRIVATE);
+        String Email   = sharedPreferences.getString("Email",null);
+        if (Email != null){
+            /*
+            TODO
+            Show log out
+            Show user info in the drawer
+            */
+        }
         mDrawerLayout = (DrawerLayout) findViewById(R.id.sideMenu);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             // Drawer completely closed
