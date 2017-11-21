@@ -2,6 +2,7 @@ package cs.dal.food4fit;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -45,6 +46,8 @@ public class LoginActivity extends AppCompatActivity{
     Button loginButton;
     LoginButton facebookLoginButton;
     CallbackManager callbackManager;
+    SharedPreferences.Editor editor;
+    SharedPreferences sharedPreferences;
     TextView passwordText, emailText, forgotText;
 
     @Override
@@ -77,8 +80,11 @@ public class LoginActivity extends AppCompatActivity{
         facebookLoginButton = (LoginButton) findViewById(R.id.login_button);
         facebookLoginButton .setReadPermissions("email");
         callbackManager = CallbackManager.Factory.create();
-        // Callback registration
 
+        sharedPreferences = getSharedPreferences("Login", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        // Callback registration
         facebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -135,7 +141,12 @@ public class LoginActivity extends AppCompatActivity{
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user.isEmailVerified()){
-                                // If User is Verified, go to Home Page
+                                // If User is Verified, Save the user locally then go to Home Page
+                                editor.putString("Email",user.getEmail() );
+                                editor.putString("DisplayName", user.getDisplayName());
+                                editor.putString("Photo", String.valueOf(user.getPhotoUrl()));
+                                editor.putString("ID",user.getUid());
+                                editor.commit();
                                 startActivity(new Intent(LoginActivity.this,MainActivity.class));
                                 finish();
                             }else{
@@ -165,7 +176,7 @@ public class LoginActivity extends AppCompatActivity{
     // Go to Password Reset Page
     public void forgotPassword (View view){
         startActivity(new Intent(this, ForgotActivity.class));
-        finish();
+//        finish();
     }
 
     // Handling Facebook token
@@ -178,9 +189,14 @@ public class LoginActivity extends AppCompatActivity{
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, Go Home Page
+                            // Sign in success, save the user locally then Go Home Page
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            editor.putString("Email",user.getEmail() );
+                            editor.putString("DisplayName", user.getDisplayName());
+                            editor.putString("Photo", String.valueOf(user.getPhotoUrl()));
+                            editor.putString("ID",user.getUid());
+                            editor.commit();
                             startActivity(new Intent(LoginActivity.this,MainActivity.class));
                             finish();
                         } else {
