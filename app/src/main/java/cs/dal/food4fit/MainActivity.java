@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     private DrawerLayout mDrawerLayout;
+    ActionBarDrawerToggle mDrawerToggle;
+    boolean slideOpen;
     Button btn_signup;
 
     private GridView gridView;
@@ -81,15 +85,44 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         // Edits By Mihyar
-        btn_signup = (Button)findViewById(R.id.user);
-
-
-
+        btn_signup = (Button) findViewById(R.id.user);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.sideMenu);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
+            // Drawer completely closed
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                slideOpen = false;
+            }
+            // Drawer completely open
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                slideOpen = true;
+            }
+        };
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
     }
 
-
-    public void goSignup (View view){
+    // Go to Login Page
+    public void goLogin (View view){
         startActivity(new Intent(this,LoginActivity.class));
         finish();
+    }
+
+    // Open and close Navigation Bar using icon
+    public void navigationBar (View view){
+        if (slideOpen){
+            mDrawerLayout.closeDrawer(Gravity.START);
+        }else{
+            mDrawerLayout.openDrawer(Gravity.START);
+        }
+    }
+
+    // Close the navigation Bar when click back
+    public void onBackPressed (){
+        if (slideOpen){
+            mDrawerLayout.closeDrawer(Gravity.START);
+        }else{
+            super.onBackPressed();
+        }
     }
 }

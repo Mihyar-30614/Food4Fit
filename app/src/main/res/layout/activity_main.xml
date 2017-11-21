@@ -20,6 +20,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:gravity="center"
+            android:onClick="navigationBar"
             android:background="@drawable/setting" />
 
         <TextView
@@ -40,7 +41,7 @@
             android:layout_gravity="center"
             android:background="@drawable/account"
             android:gravity="center"
-            android:onClick="goSignup" />
+            android:onClick="goLogin" />
     </LinearLayout>
 
     <android.support.v4.widget.DrawerLayout
