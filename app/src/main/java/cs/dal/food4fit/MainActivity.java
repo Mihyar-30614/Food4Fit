@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
+    // Side menu Navigation Listener
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
             Show log out
             Show user info in the drawer
             */
+        }else{
+            findViewById(R.id.settings_logout).setVisibility(View.INVISIBLE);
         }
         mDrawerLayout = (DrawerLayout) findViewById(R.id.sideMenu);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
@@ -135,5 +139,13 @@ public class MainActivity extends AppCompatActivity {
         }else{
             super.onBackPressed();
         }
+    }
+
+    // Sign out
+    public void signOut (){
+        // Sign out user
+        FirebaseAuth.getInstance().signOut();
+        // Clear saved info
+        sharedPreferences = null;
     }
 }
