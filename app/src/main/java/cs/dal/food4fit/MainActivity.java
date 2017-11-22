@@ -1,5 +1,6 @@
 package cs.dal.food4fit;
 
+import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -11,10 +12,12 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -28,10 +31,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import static cs.dal.food4fit.R.menu.settings;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     private DrawerLayout mDrawerLayout;
+    private NavigationView leftNavigation;
     ActionBarDrawerToggle mDrawerToggle;
     SharedPreferences sharedPreferences;
     boolean slideOpen;
@@ -79,6 +85,18 @@ public class MainActivity extends AppCompatActivity {
     };
 
     // Side menu Navigation Listener
+    private NavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener
+            = new NavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()){
+                case R.id.settings_logout:
+                    signOut();
+                    return true;
+            }
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +106,15 @@ public class MainActivity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        // Edits By Mihyar
-        btn_signup = (Button) findViewById(R.id.user);
-        sharedPreferences = this.getSharedPreferences("Login", MODE_PRIVATE);
-        String Email   = sharedPreferences.getString("Email",null);
+
+        btn_signup          = (Button) findViewById(R.id.user);
+
+        // Side Menu Navigation Listener
+        leftNavigation      = (NavigationView) findViewById(R.id.left_navigation);
+        leftNavigation.setNavigationItemSelectedListener(navigationItemSelectedListener);
+
+        sharedPreferences   = this.getSharedPreferences("Login", MODE_PRIVATE);
+        String Email        = sharedPreferences.getString("Email",null);
         if (Email != null){
             /*
             TODO
@@ -99,8 +122,11 @@ public class MainActivity extends AppCompatActivity {
             Show user info in the drawer
             */
         }else{
-            findViewById(R.id.settings_logout).setVisibility(View.INVISIBLE);
+            Menu menu = this.leftNavigation.getMenu();
+            MenuItem item = menu.findItem(R.id.settings_logout);
+            item.setVisible(false);
         }
+        // Open and Close Side Menu
         mDrawerLayout = (DrawerLayout) findViewById(R.id.sideMenu);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             // Drawer completely closed
@@ -120,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
     // Go to Login Page
     public void goLogin (View view){
         startActivity(new Intent(this,LoginActivity.class));
-        finish();
     }
 
     // Open and close Navigation Bar using icon
@@ -146,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
         // Sign out user
         FirebaseAuth.getInstance().signOut();
         // Clear saved info
-        sharedPreferences = null;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
     }
 }
