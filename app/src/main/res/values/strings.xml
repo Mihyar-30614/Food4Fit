@@ -16,7 +16,7 @@
     <string name="text_resetFail">E-Mail Address Does Not Exist</string>
     <string name="facebook_app_id">131914217512811</string>
     <string name="fb_login_protocol_scheme">fb131914217512811</string>
-    <string name="settings_profile">Profile</string>
+    <string name="settings_account">Account</string>
     <string name="settings_signout">Sign Out</string>
     <string name="drawer_open">Open Drawer</string>
     <string name="drawer_close">Close Drawer</string>
