@@ -6,12 +6,14 @@
     android:layout_height="match_parent"
     tools:context="cs.dal.food4fit.TodayFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="today" />
+        <ListView
+            android:id="@+id/BreakfastList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true">
+
+
+        </ListView>
 </FrameLayout>
 
