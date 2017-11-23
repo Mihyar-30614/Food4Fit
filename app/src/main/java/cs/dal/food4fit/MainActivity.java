@@ -102,6 +102,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        //set default page to todayFragment view
+        TodayFragment todayFragment = new TodayFragment();
+        android.support.v4.app.FragmentTransaction todayTransction = getSupportFragmentManager().beginTransaction();
+        todayTransction.replace(R.id.content, todayFragment).commit();
 
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
