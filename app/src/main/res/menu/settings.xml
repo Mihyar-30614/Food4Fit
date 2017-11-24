@@ -8,6 +8,7 @@
             android:title="@string/settings_account"/>
         <item
             android:id="@+id/settings_logout"
+            android:icon="@drawable/settings_logout"
             android:title="@string/settings_signout"/>
     </group>
 
