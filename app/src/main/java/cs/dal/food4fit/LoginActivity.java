@@ -199,7 +199,7 @@ public class LoginActivity extends AppCompatActivity{
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             editor.putString("Email",user.getEmail() );
-          g                  editor.putString("DisplayName", user.getDisplayName());
+                            editor.putString("DisplayName", user.getDisplayName());
                             editor.putString("Photo", String.valueOf(user.getPhotoUrl()));
                             editor.putString("ID",user.getUid());
                             editor.commit();
