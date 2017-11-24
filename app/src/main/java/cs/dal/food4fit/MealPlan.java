@@ -21,5 +21,18 @@ public class MealPlan {
         this.Dinner = Dinner;
 
     }
+    
+
+    public ArrayList<ImageItem> getBreakfastList() {
+        return Breakfast;
+    }
+
+    public ArrayList<ImageItem> getLunchList() {
+        return Lunch;
+    }
+
+    public ArrayList<ImageItem> getDinnerList() {
+        return Dinner;
+    }
 
 }
