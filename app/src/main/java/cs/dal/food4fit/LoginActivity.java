@@ -181,6 +181,12 @@ public class LoginActivity extends AppCompatActivity{
 
     // Handling Facebook token
     private void handleFacebookAccessToken(AccessToken token) {
+        // Show Progress Dialog
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
+        progressDialog.show();
+
         Log.d(TAG, "handleFacebookAccessToken:" + token);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -193,7 +199,7 @@ public class LoginActivity extends AppCompatActivity{
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             editor.putString("Email",user.getEmail() );
-                            editor.putString("DisplayName", user.getDisplayName());
+          g                  editor.putString("DisplayName", user.getDisplayName());
                             editor.putString("Photo", String.valueOf(user.getPhotoUrl()));
                             editor.putString("ID",user.getUid());
                             editor.commit();
@@ -205,6 +211,8 @@ public class LoginActivity extends AppCompatActivity{
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
+                        // Hide Progress Dialog
+                        progressDialog.hide();
                     }
                 });
     }
