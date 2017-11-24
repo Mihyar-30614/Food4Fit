@@ -116,18 +116,20 @@ public class LoginActivity extends AppCompatActivity{
     public void login (View view){
         Log.d(TAG, "Login");
 
-        // Show Progress Dialog
-        progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
-
         // Get the content of the input
         String email    = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-        // call login function
-        userLogin(email, password);
+        if (!email.equals("") && !password.equals("")){
+            // Show Progress Dialog
+            progressDialog = new ProgressDialog(LoginActivity.this);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Authenticating...");
+            progressDialog.show();
+
+            // call login function
+            userLogin(email, password);
+        }
     }
 
     // Login function
@@ -181,12 +183,6 @@ public class LoginActivity extends AppCompatActivity{
 
     // Handling Facebook token
     private void handleFacebookAccessToken(AccessToken token) {
-        // Show Progress Dialog
-        progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
-
         Log.d(TAG, "handleFacebookAccessToken:" + token);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -211,8 +207,6 @@ public class LoginActivity extends AppCompatActivity{
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-                        // Hide Progress Dialog
-                        progressDialog.hide();
                     }
                 });
     }

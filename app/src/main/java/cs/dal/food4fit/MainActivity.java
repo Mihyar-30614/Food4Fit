@@ -10,6 +10,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -118,19 +120,9 @@ public class MainActivity extends AppCompatActivity {
         leftNavigation      = (NavigationView) findViewById(R.id.left_navigation);
         leftNavigation.setNavigationItemSelectedListener(navigationItemSelectedListener);
 
-        sharedPreferences   = this.getSharedPreferences("Login", MODE_PRIVATE);
-        String Email        = sharedPreferences.getString("Email",null);
-        if (Email != null){
-            /*
-            TODO
-            Show log out
-            Show user info in the drawer
-            */
-        }else{
-            Menu menu = this.leftNavigation.getMenu();
-            MenuItem item = menu.findItem(R.id.settings_logout);
-            item.setVisible(false);
-        }
+        // Handle Side menu
+        menuController();
+
         // Open and Close Side Menu
         mDrawerLayout = (DrawerLayout) findViewById(R.id.sideMenu);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
@@ -146,6 +138,30 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         mDrawerLayout.addDrawerListener(mDrawerToggle);
+    }
+
+    // Handle changes to the left side menu
+    private void menuController() {
+        sharedPreferences   = this.getSharedPreferences("Login", MODE_PRIVATE);
+        String Email        = sharedPreferences.getString("Email",null);
+        if (Email != null){
+            /*
+            TODO
+            Show log out
+            Show user info in the drawer
+            */
+        }else{
+            Menu menu            = this.leftNavigation.getMenu();
+            MenuItem logout      = menu.findItem(R.id.settings_logout);
+            MenuItem account     = menu.findItem(R.id.settings_profile);
+            View header = leftNavigation.getHeaderView(0);
+            ImageView profilePic = (ImageView) header.findViewById(R.id.profilePhoto);
+
+
+            logout.setVisible(false);
+            account.setVisible(false);
+            profilePic.setVisibility(View.INVISIBLE);
+        }
     }
 
     // Go to Login Page
@@ -179,6 +195,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();
+        // Close the side menu
         onBackPressed();
+        // Recreate the content
+        menuController();
     }
 }
