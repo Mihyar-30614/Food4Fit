@@ -106,11 +106,11 @@ public class FoodItem {
                 '}';
     }
 
-    public void getItem(String n) {
+    public void getItem(String s, int n) {
         String result = null;
         try {
-            url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query=" +
-                    n);
+            url = new URL("https://api.nal.usda.gov/ndb/list?format=json&lt=f&sort=n&api_key=" +
+                    "zv4fwt94h3njadPKyGHxuAKQkSm7HSpGAzdwehsx");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
