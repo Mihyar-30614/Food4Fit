@@ -70,6 +70,11 @@ public class LoginActivity extends AppCompatActivity{
 
         }
         */
+        // Define a progress dialog
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
+
         // Initialize Page Content
         loginButton   = (Button)   findViewById(R.id.btn_login);
         passwordText  = (TextView) findViewById(R.id.input_password);
@@ -109,25 +114,22 @@ public class LoginActivity extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-
     }
 
     // Login Functionality
     public void login (View view){
         Log.d(TAG, "Login");
 
-        // Show Progress Dialog
-        progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
-
         // Get the content of the input
         String email    = emailText.getText().toString();
         String password = passwordText.getText().toString();
 
-        // call login function
-        userLogin(email, password);
+        if (!email.equals("") && !password.equals("")){
+            // Show Progress Dialog
+            progressDialog.show();
+            // call login function
+            userLogin(email, password);
+        }
     }
 
     // Login function
@@ -148,6 +150,8 @@ public class LoginActivity extends AppCompatActivity{
                                 editor.putString("ID",user.getUid());
                                 editor.commit();
                                 startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                                // Hide Progress Dialog
+                                progressDialog.dismiss();
                                 finish();
                             }else{
                                 // If User is not Verified, Show text to the user
@@ -161,8 +165,6 @@ public class LoginActivity extends AppCompatActivity{
                                     Toast.LENGTH_SHORT).show();
                             forgotText.setVisibility(View.VISIBLE);
                         }
-                        // Hide Progress Dialog
-                        progressDialog.hide();
                     }
                 });
     }
@@ -183,6 +185,9 @@ public class LoginActivity extends AppCompatActivity{
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
 
+        // Show Progress Dialog
+        progressDialog.show();
+
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -198,6 +203,7 @@ public class LoginActivity extends AppCompatActivity{
                             editor.putString("ID",user.getUid());
                             editor.commit();
                             startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                            progressDialog.dismiss();
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -207,12 +213,5 @@ public class LoginActivity extends AppCompatActivity{
                         }
                     }
                 });
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        finish();
     }
 }

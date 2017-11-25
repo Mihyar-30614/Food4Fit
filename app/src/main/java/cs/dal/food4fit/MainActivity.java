@@ -1,5 +1,6 @@
 package cs.dal.food4fit;
 
+import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -9,17 +10,21 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,10 +33,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import static cs.dal.food4fit.R.menu.settings;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     private DrawerLayout mDrawerLayout;
+    private NavigationView leftNavigation;
     ActionBarDrawerToggle mDrawerToggle;
     SharedPreferences sharedPreferences;
     boolean slideOpen;
@@ -78,10 +86,29 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
+    // Side menu Navigation Listener
+    private NavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener
+            = new NavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()){
+                case R.id.settings_logout:
+                    signOut();
+                    return true;
+            }
+            return false;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        //set default page to todayFragment view
+        TodayFragment todayFragment = new TodayFragment();
+        android.support.v4.app.FragmentTransaction todayTransction = getSupportFragmentManager().beginTransaction();
+        todayTransction.replace(R.id.content, todayFragment).commit();
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -99,17 +126,17 @@ public class MainActivity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        // Edits By Mihyar
-        btn_signup = (Button) findViewById(R.id.user);
-        sharedPreferences = this.getSharedPreferences("Login", MODE_PRIVATE);
-        String Email   = sharedPreferences.getString("Email",null);
-        if (Email != null){
-            /*
-            TODO
-            Show log out
-            Show user info in the drawer
-            */
-        }
+
+        btn_signup          = (Button) findViewById(R.id.user);
+
+        // Side Menu Navigation Listener
+        leftNavigation      = (NavigationView) findViewById(R.id.left_navigation);
+        leftNavigation.setNavigationItemSelectedListener(navigationItemSelectedListener);
+
+        // Handle Side menu
+        menuController();
+
+        // Open and Close Side Menu
         mDrawerLayout = (DrawerLayout) findViewById(R.id.sideMenu);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             // Drawer completely closed
@@ -126,10 +153,33 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.addDrawerListener(mDrawerToggle);
     }
 
+    // Handle changes to the left side menu
+    private void menuController() {
+        sharedPreferences   = this.getSharedPreferences("Login", MODE_PRIVATE);
+        String Email        = sharedPreferences.getString("Email",null);
+        if (Email != null){
+            /*
+            TODO
+            Show log out
+            Show user info in the drawer
+            */
+        }else{
+            Menu menu            = this.leftNavigation.getMenu();
+            MenuItem logout      = menu.findItem(R.id.settings_logout);
+            MenuItem account     = menu.findItem(R.id.settings_profile);
+            View header = leftNavigation.getHeaderView(0);
+            ImageView profilePic = (ImageView) header.findViewById(R.id.profilePhoto);
+
+
+            logout.setVisible(false);
+            account.setVisible(false);
+            profilePic.setVisibility(View.INVISIBLE);
+        }
+    }
+
     // Go to Login Page
     public void goLogin (View view){
         startActivity(new Intent(this,LoginActivity.class));
-        finish();
     }
 
     // Open and close Navigation Bar using icon
@@ -148,5 +198,19 @@ public class MainActivity extends AppCompatActivity {
         }else{
             super.onBackPressed();
         }
+    }
+
+    // Sign out
+    public void signOut (){
+        // Sign out user
+        FirebaseAuth.getInstance().signOut();
+        // Clear saved info
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
+        // Close the side menu
+        onBackPressed();
+        // Recreate the content
+        menuController();
     }
 }
