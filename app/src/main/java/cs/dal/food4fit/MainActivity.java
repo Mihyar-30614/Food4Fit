@@ -142,22 +142,22 @@ public class MainActivity extends AppCompatActivity {
 
     // Handle changes to the left side menu
     private void menuController() {
+        // Get Handle of the Header
+        Menu menu            = this.leftNavigation.getMenu();
+        MenuItem logout      = menu.findItem(R.id.settings_logout);
+        MenuItem account     = menu.findItem(R.id.settings_profile);
+        View header = leftNavigation.getHeaderView(0);
+        ImageView profilePic = (ImageView) header.findViewById(R.id.UserProfilePhoto);
         sharedPreferences   = this.getSharedPreferences("Login", MODE_PRIVATE);
-        String Email        = sharedPreferences.getString("Email",null);
-        if (Email != null){
+        String email        = sharedPreferences.getString("Email",null);
+
+        if (email != null){
             /*
-            TODO
-            Show log out
-            Show user info in the drawer
+            TODO Show log out
+            TODO Show user info in the drawer
             */
         }else{
-            Menu menu            = this.leftNavigation.getMenu();
-            MenuItem logout      = menu.findItem(R.id.settings_logout);
-            MenuItem account     = menu.findItem(R.id.settings_profile);
-            View header = leftNavigation.getHeaderView(0);
-            ImageView profilePic = (ImageView) header.findViewById(R.id.profilePhoto);
-
-
+            // Hide Menu Element
             logout.setVisible(false);
             account.setVisible(false);
             profilePic.setVisibility(View.INVISIBLE);

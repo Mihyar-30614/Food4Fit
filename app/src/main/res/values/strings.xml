@@ -8,6 +8,8 @@
     <string name="input_name">Name</string>
     <string name="input_email">Email</string>
     <string name="input_password">Password</string>
+    <string name="profile_confirm">Confirm Password</string>
+    <string name="profile_update">Update Info</string>
     <string name="button_signup">Create Account</string>
     <string name="goSingup">No account yet? Create one</string>
     <string name="button_login">Login</string>
