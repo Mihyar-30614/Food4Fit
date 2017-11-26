@@ -61,6 +61,9 @@
             android:name=".RecipeActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".CalendarActivity"></activity>
+
+        <activity android:name=".AddMealActivity"></activity>
     </application>
 
 </manifest>
