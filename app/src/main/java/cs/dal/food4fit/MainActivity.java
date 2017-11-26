@@ -110,19 +110,19 @@ public class MainActivity extends AppCompatActivity {
         android.support.v4.app.FragmentTransaction todayTransction = getSupportFragmentManager().beginTransaction();
         todayTransction.replace(R.id.content, todayFragment).commit();
 
-        Thread thread = new Thread(new Runnable() {
+        /*Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Recipe r = new Recipe();
-                    r.getItem("pizza");
-                    String item = r.getName();
+                    FoodItem f =  new FoodItem();
+                    f.getItem("pizza");
+                    f.toString();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
-        thread.start();
+        thread.start();*/
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
