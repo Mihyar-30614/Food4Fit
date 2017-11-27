@@ -35,6 +35,10 @@
             android:name=".ForgotActivity"
             android:parentActivityName=".LoginActivity"
             android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ProfileActivity"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <!-- Facebook Login Begin -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

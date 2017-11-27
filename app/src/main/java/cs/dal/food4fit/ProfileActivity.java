@@ -1,12 +1,18 @@
 package cs.dal.food4fit;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by Mihyar on 11/26/2017.
@@ -40,8 +46,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Populate Layout with User Info
         profileName.setText(oldName);
-        // TODO populate User Photo
-
+        // Populate User Photo
+        if(oldPhotoUrl.equals("")){
+            oldPhotoUrl = "http://i.imgur.com/FlEXhZo.jpg?1";
+        }
+        loadProfilePic(oldPhotoUrl);
     }
 
     public void updateUserInfo(View view){
@@ -52,5 +61,29 @@ public class ProfileActivity extends AppCompatActivity {
         if (!oldName.equals(name) || (!password.equals("") && !confirm.equals(""))){
             // TODO Update User Info
         }
+    }
+
+    public void loadProfilePic (final String link){
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try  {
+                    URL newurl = null;
+                    try {
+                        newurl = new URL(link);
+                        Bitmap userPhoto = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream());
+                        profilePhoto.setImageBitmap(userPhoto);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
     }
 }

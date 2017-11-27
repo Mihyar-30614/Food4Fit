@@ -16,8 +16,8 @@
         <!-- Profile Photo-->
         <ImageView
             android:id="@+id/profile_photo"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_width="340dp"
+            android:layout_height="100dp" />
 
         <!--  Name Label -->
         <android.support.design.widget.TextInputLayout

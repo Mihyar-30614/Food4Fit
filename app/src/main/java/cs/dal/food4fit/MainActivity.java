@@ -95,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.settings_logout:
                     signOut();
                     return true;
+                case R.id.settings_profile:
+                    goProfile();
+                    return true;
             }
             return false;
         }
@@ -167,6 +170,11 @@ public class MainActivity extends AppCompatActivity {
     // Go to Login Page
     public void goLogin (View view){
         startActivity(new Intent(this,LoginActivity.class));
+    }
+
+    // Go to User Profile
+    public void goProfile (){
+        startActivity(new Intent(this, ProfileActivity.class));
     }
 
     // Open and close Navigation Bar using icon
