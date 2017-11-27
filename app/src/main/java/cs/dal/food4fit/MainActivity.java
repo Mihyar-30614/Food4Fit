@@ -29,11 +29,15 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 import static cs.dal.food4fit.R.menu.settings;
+import static cs.dal.food4fit.TodayFragment.getDateString;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -151,6 +155,51 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         mDrawerLayout.addDrawerListener(mDrawerToggle);
+
+        MealPlan mealPlan1 = new MealPlan(getData(R.array.image_ids),getData(R.array.image_ids),getData(R.array.image_ids));
+        MealPlan mealPlan2 = new MealPlan(getData(R.array.image_idsln),getData(R.array.image_idsln),getData(R.array.image_idsln));
+        MealPlan mealPlan3 = new MealPlan(getData(R.array.image_idsdn),getData(R.array.image_idsdn),getData(R.array.image_idsdn));
+        findMP = getCalendar(mealPlan1,mealPlan2,mealPlan3);
+    }
+
+    public HashMap<String,Calendar> findMP = new HashMap<String, Calendar>();
+//    public FirebaseDatabase firebaseDBInstance = FirebaseDatabase.getInstance();
+//    public DatabaseReference firebaseReference = firebaseDBInstance.getReference("MealCalendar");
+
+
+    //make some raw data
+    private ArrayList<ImageItem> getData(int imagearray) {
+        final ArrayList<ImageItem> imageItems = new ArrayList<>();
+        TypedArray imgs = getResources().obtainTypedArray(imagearray);
+
+        //R.array.image_ids
+        for (int i = 0; i < imgs.length(); i++) {
+            Bitmap bitmap1 = BitmapFactory.decodeStream(getResources().openRawResource(imgs.getResourceId(i,-1)));
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
+            imageItems.add(new ImageItem(bitmap1, "Image#" + i,imgs.getResourceId(i, -1)));
+        }
+        return imageItems;
+    }
+
+    private HashMap<String,Calendar> getCalendar(MealPlan mealPlan1,MealPlan mealPlan2, MealPlan mealPlan3){
+
+        final HashMap<String,Calendar> findMP = new HashMap<>();
+        TypedArray date = getResources().obtainTypedArray(R.array.date);
+
+        final Calendar calendar1 = new Calendar("GraceTest",getDateString(new Date()),mealPlan1);
+        final Calendar calendar2 = new Calendar("GraceTest",date.getString(0),mealPlan2);
+        final Calendar calendar3 = new Calendar("GraceTest",date.getString(1),mealPlan3);
+
+        findMP.put(getDateString(new Date()),calendar1);
+        findMP.put(date.getString(0),calendar2);
+        findMP.put(date.getString(1),calendar3);
+//
+//        firebaseReference.child(getDateString(new Date())).setValue(calendar1);
+//        firebaseReference.child(date.getString(0)).setValue(calendar2);
+//        firebaseReference.child(date.getString(1)).setValue(calendar3);
+
+
+        return findMP;
     }
 
     // Handle changes to the left side menu
