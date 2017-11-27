@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
             if (name != null){
                 profileName.setText(name);
             }
-            if (photo.equals("")){
+            if (photo.equals("null")){
                 photo = "http://i.imgur.com/FlEXhZo.jpg?1";
             }
             loadProfilePic(photo);

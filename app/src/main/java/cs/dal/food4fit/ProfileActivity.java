@@ -4,11 +4,20 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -21,9 +30,12 @@ import java.net.URL;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    private static final String TAG = "ProfileActivity";
     TextView profileName, profilePassword, profileConfirm;
-    String name, oldName, password, confirm, photoUrl, oldPhotoUrl;
+    String name, oldName, oldEmail, password, confirm, photoUrl, oldPhotoUrl;
     Button updateInfo;
+    FirebaseUser user;
+    FirebaseAuth mAuth;
     ImageView profilePhoto;
     SharedPreferences sharedPreferences;
 
@@ -38,16 +50,18 @@ public class ProfileActivity extends AppCompatActivity {
         profilePassword = (TextView) findViewById(R.id.profile_password);
         profileConfirm  = (TextView) findViewById(R.id.profile_confirm);
         updateInfo      = (Button)   findViewById(R.id.btn_profile_update);
+        mAuth           = FirebaseAuth.getInstance();
 
         // Get the Current User Info
         sharedPreferences   = this.getSharedPreferences("Login", MODE_PRIVATE);
         oldName        = sharedPreferences.getString("DisplayName",null);
         oldPhotoUrl    = sharedPreferences.getString("Photo",null);
+        oldEmail       = sharedPreferences.getString("Email", null);
 
         // Populate Layout with User Info
         profileName.setText(oldName);
         // Populate User Photo
-        if(oldPhotoUrl.equals("")){
+        if(oldPhotoUrl.equals("null")){
             oldPhotoUrl = "http://i.imgur.com/FlEXhZo.jpg?1";
         }
         loadProfilePic(oldPhotoUrl);
@@ -58,9 +72,35 @@ public class ProfileActivity extends AppCompatActivity {
         password = profilePassword.getText().toString();
         confirm  = profileConfirm.getText().toString();
 
-        if (!oldName.equals(name) || (!password.equals("") && !confirm.equals(""))){
-            // TODO Update User Info
+        if (!password.equals("") && !confirm.equals("")){
+            // Update User Password
+            updatePassword();
         }
+//        if (!oldName.equals(name)){
+//            // TODO Update User Display Name
+//        }
+    }
+
+    // Update User Password
+    private void updatePassword() {
+        mAuth.signOut();
+        mAuth.signInWithEmailAndPassword(oldEmail, password)
+                .addOnCompleteListener(ProfileActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            user = FirebaseAuth.getInstance().getCurrentUser();
+                            if(user.updatePassword(confirm).isSuccessful()){
+                                Toast.makeText(ProfileActivity.this, "Password Update Failed!",Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(ProfileActivity.this, "Password Update Success!",Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(ProfileActivity.this, "Incorrect Password.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     public void loadProfilePic (final String link){
