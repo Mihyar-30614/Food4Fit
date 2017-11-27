@@ -14,18 +14,20 @@
     <ImageView
         android:id="@+id/UserProfilePhoto"
         android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/default_profile_pic" />
+        android:layout_height="50dp" />
 
     <TextView
+        android:id="@+id/profileName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profileName"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/cardview_dark_background" />
 
     <TextView
         android:id="@+id/profileEmail"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/cardview_dark_background"/>
 
 </LinearLayout>

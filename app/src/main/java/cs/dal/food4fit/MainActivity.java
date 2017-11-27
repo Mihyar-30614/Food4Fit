@@ -31,6 +31,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import static cs.dal.food4fit.R.menu.settings;
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView leftNavigation;
     ActionBarDrawerToggle mDrawerToggle;
     SharedPreferences sharedPreferences;
+    ImageView profilePic;
+    TextView profileName, profileEmail;
     boolean slideOpen;
     Button btn_signup;
 
@@ -149,22 +154,57 @@ public class MainActivity extends AppCompatActivity {
         Menu menu            = this.leftNavigation.getMenu();
         MenuItem logout      = menu.findItem(R.id.settings_logout);
         MenuItem account     = menu.findItem(R.id.settings_profile);
-        View header = leftNavigation.getHeaderView(0);
-        ImageView profilePic = (ImageView) header.findViewById(R.id.UserProfilePhoto);
+        View header          = leftNavigation.getHeaderView(0);
+        profilePic           = (ImageView) header.findViewById(R.id.UserProfilePhoto);
+        profileName          = (TextView) header.findViewById(R.id.profileName);
+        profileEmail         = (TextView) header.findViewById(R.id.profileEmail);
+
         sharedPreferences   = this.getSharedPreferences("Login", MODE_PRIVATE);
         String email        = sharedPreferences.getString("Email",null);
+        String name         = sharedPreferences.getString("DisplayName",null);
+        String photo        = sharedPreferences.getString("Photo",null);
 
         if (email != null){
-            /*
-            TODO Show log out
-            TODO Show user info in the drawer
-            */
+            // Show user info in the drawer
+            profileEmail.setText(email);
+            if (name != null){
+                profileName.setText(name);
+            }
+            if (photo.equals("")){
+                photo = "http://i.imgur.com/FlEXhZo.jpg?1";
+            }
+            loadProfilePic(photo);
         }else{
             // Hide Menu Element
             logout.setVisible(false);
             account.setVisible(false);
             profilePic.setVisibility(View.INVISIBLE);
+            profileEmail.setVisibility(View.INVISIBLE);
+            profileName.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void loadProfilePic(final String photo) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try  {
+                    URL newurl = null;
+                    try {
+                        newurl = new URL(photo);
+                        Bitmap userPhoto = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream());
+                        profilePic.setImageBitmap(userPhoto);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
     }
 
     // Go to Login Page
