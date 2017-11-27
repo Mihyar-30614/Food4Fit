@@ -39,5 +39,37 @@
 
 
     </string-array>
+    
+        <string-array name="date">
+        <item>11-23-2017</item>
+        <item>11-24-2017</item>
+        <item>11-25-2017</item>
+        <item>11-26-2017</item>
+        <item>11-27-2017</item>
+        <item>11-28-2017</item>
+
+
+    </string-array>
+
+    <string-array name="image_idsbf">
+        <item>@drawable/n1</item>
+        <item>@drawable/n2</item>
+        <item>@drawable/n3</item>
+
+    </string-array>
+
+    <string-array name="image_idsln">
+
+        <item>@drawable/n5</item>
+        <item>@drawable/n6</item>
+
+    </string-array>
+
+    <string-array name="image_idsdn">
+
+        <item>@drawable/n4</item>
+        <item>@drawable/n5</item>
+
+    </string-array>
 
 </resources>

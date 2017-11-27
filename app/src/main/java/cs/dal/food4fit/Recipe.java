@@ -1,22 +1,26 @@
 package cs.dal.food4fit;
 
+import android.os.AsyncTask;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.net.ssl.HttpsURLConnection;
+import static java.lang.String.valueOf;
+
 
 /**
  * Created by adamwoodland on 2017-11-21.
  */
 
-public class Recipe {
+public class Recipe extends AsyncTask<String,Void,Void> {
 
     String name;
     HashMap<FoodItem,Integer> ingredients;
@@ -25,12 +29,58 @@ public class Recipe {
     int time;
     int serving;
     URL url;
-    HttpsURLConnection connect;
+    HttpURLConnection connect;
     InputStreamReader reader;
     InputStream in;
 
-    public Recipe(String name, HashMap<FoodItem,Integer> ingredients, ArrayList<String> instructions, ImageItem photo, int time,
-                  int serving) {
+    public Recipe() { }
+
+    @Override
+    protected Void doInBackground(String... strings) {
+        String result = null;
+        try {
+            url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query=" +
+                    strings[0]);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        try {
+            connect = (HttpURLConnection)(url.openConnection());
+            connect.setRequestProperty("X-Mashape-Key","IOtJxVTiiFmshbyxpstTobJhIZ4hp1ZnKsxjsnfrwp60NmBIzv");
+            connect.setRequestProperty("X-Mashape-Host","spoonacular-recipe-food-nutrition-v1.p.mashape.com");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            in = new BufferedInputStream(connect.getInputStream());
+            reader = new InputStreamReader(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BufferedReader bReader = new BufferedReader(reader);
+        StringBuilder sb = new StringBuilder();
+        String line = null;
+        try {
+            while ((line = bReader.readLine()) != null)
+                sb.append(line + "\n");
+            result = sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        name = result;
+        return null;
+    }
+
+    public Recipe(String name, HashMap<FoodItem,Integer> ingredients, ArrayList<String> instructions, ImageItem photo,
+                  int time, int serving) {
         this.name = name;
         this.ingredients = ingredients;
         this.instructions = instructions;
@@ -100,43 +150,7 @@ public class Recipe {
     }
 
     public void getItem(String n) {
-        String result = null;
-        try {
-            url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query=" +
-                    n);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        try {
-            connect = (HttpsURLConnection) (url.openConnection());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            in = new BufferedInputStream(connect.getInputStream());
-            reader = new InputStreamReader(in);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        BufferedReader bReader = new BufferedReader(reader);
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-        try {
-            while ((line = bReader.readLine()) != null)
-                sb.append(line + "\n");
-            result = sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        name = result;
+        doInBackground(n);
     }
 
 }

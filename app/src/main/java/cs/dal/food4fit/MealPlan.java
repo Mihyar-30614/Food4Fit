@@ -9,17 +9,30 @@ import java.util.Date;
 
 public class MealPlan {
 
-    private Date date;
-    private ArrayList<Recipe> Breakfast;
-    private ArrayList<Recipe> Lunch;
-    private ArrayList<Recipe> Dinner;
 
-    public MealPlan(Date date, ArrayList<Recipe> Breakfast, ArrayList<Recipe> Lunch, ArrayList<Recipe> Dinner) {
-        this.date = date;
+
+    private ArrayList<ImageItem> Breakfast;
+    private ArrayList<ImageItem> Lunch;
+    private ArrayList<ImageItem> Dinner;
+
+    public MealPlan(ArrayList<ImageItem> Breakfast, ArrayList<ImageItem> Lunch, ArrayList<ImageItem> Dinner) {
+
         this.Breakfast = Breakfast;
         this.Lunch = Lunch;
         this.Dinner = Dinner;
 
+    }
+
+    public ArrayList<ImageItem> getBreakfastList() {
+        return Breakfast;
+    }
+
+    public ArrayList<ImageItem> getLunchList() {
+        return Lunch;
+    }
+
+    public ArrayList<ImageItem> getDinnerList() {
+        return Dinner;
     }
 
 }
