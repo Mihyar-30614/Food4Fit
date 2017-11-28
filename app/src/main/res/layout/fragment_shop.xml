@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="@string/make_an_order"
+        android:text="@string/shopapp"
         android:textColor="@color/com_facebook_blue"
         android:shadowColor="@color/com_facebook_blue"/>
 
