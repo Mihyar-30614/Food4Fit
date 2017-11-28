@@ -164,6 +164,8 @@ public class LoginActivity extends AppCompatActivity{
                             Toast.makeText(LoginActivity.this, "Incorrect Email or Password.",
                                     Toast.LENGTH_SHORT).show();
                             forgotText.setVisibility(View.VISIBLE);
+                            // Hide Progress Dialog
+                            progressDialog.dismiss();
                         }
                     }
                 });

@@ -35,6 +35,10 @@
             android:name=".ForgotActivity"
             android:parentActivityName=".LoginActivity"
             android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ProfileActivity"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <!-- Facebook Login Begin -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -61,6 +65,9 @@
             android:name=".RecipeActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".CalendarActivity"></activity>
+
+        <activity android:name=".AddMealActivity"></activity>
     </application>
 
 </manifest>

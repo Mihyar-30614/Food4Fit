@@ -31,9 +31,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 import static cs.dal.food4fit.R.menu.settings;
@@ -51,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private GridView gridView;
     private GridViewAdapter gridAdapter;
     private Context context;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -111,6 +109,20 @@ public class MainActivity extends AppCompatActivity {
         TodayFragment todayFragment = new TodayFragment();
         android.support.v4.app.FragmentTransaction todayTransction = getSupportFragmentManager().beginTransaction();
         todayTransction.replace(R.id.content, todayFragment).commit();
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Recipe r = new Recipe();
+                    r.getItem("pizza");
+                    String item = r.getName();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
