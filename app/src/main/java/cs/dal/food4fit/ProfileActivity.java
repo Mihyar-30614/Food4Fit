@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -38,6 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     ImageView profilePhoto;
     SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,9 +78,30 @@ public class ProfileActivity extends AppCompatActivity {
             // Update User Password
             updatePassword();
         }
-//        if (!oldName.equals(name)){
-//            // TODO Update User Display Name
-//        }
+        if (oldName == null){
+            oldName = "";
+        }
+        if (!oldName.equals(name)){
+            // TODO Update User Display Name
+            user = mAuth.getCurrentUser();
+            UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
+            user.updateProfile(request).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()){
+                        user = mAuth.getCurrentUser();
+                        editor = sharedPreferences.edit();
+                        editor.putString("DisplayName", user.getDisplayName());
+                        editor.apply();
+                        Toast.makeText(ProfileActivity.this, "Name Update Success!",Toast.LENGTH_SHORT).show();
+                        finish();
+                        onBackPressed();
+                    }else{
+                        Toast.makeText(ProfileActivity.this, "Name Update Failed!",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
     }
 
     // Update User Password

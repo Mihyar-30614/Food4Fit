@@ -27,6 +27,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -155,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 slideOpen = false;
+                // Handle Side menu
+                menuController();
             }
             // Drawer completely open
             public void onDrawerOpened(View drawerView) {
@@ -301,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
     public void signOut (){
         // Sign out user
         FirebaseAuth.getInstance().signOut();
+        LoginManager.getInstance().logOut();
         // Clear saved info
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
