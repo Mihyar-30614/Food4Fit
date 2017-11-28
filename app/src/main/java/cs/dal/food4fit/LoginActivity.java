@@ -148,6 +148,7 @@ public class LoginActivity extends AppCompatActivity{
                                 editor.putString("DisplayName", user.getDisplayName());
                                 editor.putString("Photo", String.valueOf(user.getPhotoUrl()));
                                 editor.putString("ID",user.getUid());
+                                editor.putString("Facebook","False");
                                 editor.commit();
                                 startActivity(new Intent(LoginActivity.this,MainActivity.class));
                                 // Hide Progress Dialog
@@ -203,6 +204,7 @@ public class LoginActivity extends AppCompatActivity{
                             editor.putString("DisplayName", user.getDisplayName());
                             editor.putString("Photo", String.valueOf(user.getPhotoUrl()));
                             editor.putString("ID",user.getUid());
+                            editor.putString("Facebook","True");
                             editor.commit();
                             startActivity(new Intent(LoginActivity.this,MainActivity.class));
                             progressDialog.dismiss();

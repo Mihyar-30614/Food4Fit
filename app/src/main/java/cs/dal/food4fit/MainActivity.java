@@ -17,6 +17,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -228,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
         String email        = sharedPreferences.getString("Email",null);
         String name         = sharedPreferences.getString("DisplayName",null);
         String photo        = sharedPreferences.getString("Photo",null);
+        String facebook     = sharedPreferences.getString("Facebook", null);
 
         if (email != null){
             // Show user info in the drawer
@@ -239,6 +241,15 @@ public class MainActivity extends AppCompatActivity {
                 photo = "http://i.imgur.com/FlEXhZo.jpg?1";
             }
             loadProfilePic(photo);
+
+            // Facebook can not change info using app
+            if (facebook.equals("True")){
+                profilePic.setEnabled(false);
+                profileName.setEnabled(false);
+                profileName.setInputType(InputType.TYPE_NULL);
+                profileEmail.setEnabled(false);
+                profileEmail.setInputType(InputType.TYPE_NULL);
+            }
         }else{
             // Hide Menu Element
             logout.setVisible(false);
