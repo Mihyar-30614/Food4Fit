@@ -1,6 +1,11 @@
 package cs.dal.food4fit;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -13,6 +18,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import static java.lang.String.valueOf;
 
 
@@ -20,73 +27,25 @@ import static java.lang.String.valueOf;
  * Created by adamwoodland on 2017-11-21.
  */
 
-public class Recipe extends AsyncTask<String,Void,Void> {
+public class Recipe {
 
     String name;
-    HashMap<FoodItem,Integer> ingredients;
-    ArrayList<String> instructions;
-    ImageItem photo;
+    int id;
+    String ingredients;
+    String instructions;
+    String img;
+    Bitmap photo;
     int time;
-    int serving;
-    URL url;
-    HttpURLConnection connect;
-    InputStreamReader reader;
-    InputStream in;
 
     public Recipe() { }
 
-    @Override
-    protected Void doInBackground(String... strings) {
-        String result = null;
-        try {
-            url = new URL("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?query=" +
-                    strings[0]);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        try {
-            connect = (HttpURLConnection)(url.openConnection());
-            connect.setRequestProperty("X-Mashape-Key","IOtJxVTiiFmshbyxpstTobJhIZ4hp1ZnKsxjsnfrwp60NmBIzv");
-            connect.setRequestProperty("X-Mashape-Host","spoonacular-recipe-food-nutrition-v1.p.mashape.com");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            in = new BufferedInputStream(connect.getInputStream());
-            reader = new InputStreamReader(in);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        BufferedReader bReader = new BufferedReader(reader);
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-        try {
-            while ((line = bReader.readLine()) != null)
-                sb.append(line + "\n");
-            result = sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        name = result;
-        return null;
-    }
-
-    public Recipe(String name, HashMap<FoodItem,Integer> ingredients, ArrayList<String> instructions, ImageItem photo,
+    public Recipe(String name, String ingredients, String instructions, Bitmap photo,
                   int time, int serving) {
         this.name = name;
         this.ingredients = ingredients;
         this.instructions = instructions;
         this.photo = photo;
         this.time = time;
-        this.serving = serving;
     }
 
     public String getName() {
@@ -97,29 +56,29 @@ public class Recipe extends AsyncTask<String,Void,Void> {
         this.name = name;
     }
 
-    public HashMap<FoodItem, Integer> getIngredients() {
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
+
+    public String getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(HashMap<FoodItem, Integer> ingredients) {
+    public void setIngredients(String ingredients) {
         this.ingredients = ingredients;
     }
 
-    public ArrayList<String> getInstructions() {
+    public String getInstructions() {
         return instructions;
     }
 
-    public void setInstructions(ArrayList<String> instructions) {
+    public void setInstructions(String instructions) {
         this.instructions = instructions;
     }
 
-    public ImageItem getPhoto() {
-        return photo;
-    }
+    public String getImg() { return img; }
 
-    public void setPhoto(ImageItem photo) {
-        this.photo = photo;
-    }
+    public void setImg(String img) { this.img = img; }
 
     public int getTime() {
         return time;
@@ -129,28 +88,14 @@ public class Recipe extends AsyncTask<String,Void,Void> {
         this.time = time;
     }
 
-    public int getServing() {
-        return serving;
-    }
-
-    public void setServing(int serving) {
-        this.serving = serving;
-    }
-
     @Override
     public String toString() {
         return "Recipe{" +
                 "name='" + name + '\'' +
                 ", ingredients=" + ingredients +
                 ", instructions=" + instructions +
-                ", photo=" + photo +
                 ", time=" + time +
-                ", serving=" + serving +
                 '}';
-    }
-
-    public void getItem(String n) {
-        doInBackground(n);
     }
 
 }
