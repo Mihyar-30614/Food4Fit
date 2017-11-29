@@ -11,11 +11,11 @@ public class MealPlan {
 
 
 
-    private ArrayList<ImageItem> Breakfast;
-    private ArrayList<ImageItem> Lunch;
-    private ArrayList<ImageItem> Dinner;
+    private ArrayList<Recipe> Breakfast;
+    private ArrayList<Recipe> Lunch;
+    private ArrayList<Recipe> Dinner;
 
-    public MealPlan(ArrayList<ImageItem> Breakfast, ArrayList<ImageItem> Lunch, ArrayList<ImageItem> Dinner) {
+    public MealPlan(ArrayList<Recipe> Breakfast, ArrayList<Recipe> Lunch, ArrayList<Recipe> Dinner) {
 
         this.Breakfast = Breakfast;
         this.Lunch = Lunch;
@@ -23,15 +23,15 @@ public class MealPlan {
 
     }
 
-    public ArrayList<ImageItem> getBreakfastList() {
+    public ArrayList<Recipe> getBreakfastList() {
         return Breakfast;
     }
 
-    public ArrayList<ImageItem> getLunchList() {
+    public ArrayList<Recipe> getLunchList() {
         return Lunch;
     }
 
-    public ArrayList<ImageItem> getDinnerList() {
+    public ArrayList<Recipe> getDinnerList() {
         return Dinner;
     }
 
