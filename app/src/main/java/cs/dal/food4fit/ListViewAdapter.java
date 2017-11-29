@@ -67,12 +67,12 @@ public class ListViewAdapter extends BaseAdapter {
                 break;
             case 0:
                 view = inflater.inflate(R.layout.list_item_layout,null);
-                ImageItem item = (ImageItem) data.get(i);
+                Recipe item = (Recipe) data.get(i);
                 TextView imageitem_title = (TextView) view.findViewById(R.id.text);
                 ImageView imageitem_image = (ImageView) view.findViewById(R.id.image);
 
-                imageitem_title.setText(item.getTitle());
-                imageitem_image.setImageBitmap(item.getImage());
+                imageitem_title.setText(item.getName());
+                imageitem_image.setImageBitmap(item.getPhoto());
 
                 Log.i("set","this view has inflated. has setImage&Text");
 
