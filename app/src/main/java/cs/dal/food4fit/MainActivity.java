@@ -154,6 +154,15 @@ public class MainActivity extends AppCompatActivity {
         String photo        = sharedPreferences.getString("Photo",null);
         String facebook     = sharedPreferences.getString("Facebook", null);
 
+        Menu menu            = this.leftNavigation.getMenu();
+        MenuItem logout      = menu.findItem(R.id.settings_logout);
+        MenuItem account     = menu.findItem(R.id.settings_profile);
+        View header          = leftNavigation.getHeaderView(0);
+        profilePic           = (ImageView) header.findViewById(R.id.UserProfilePhoto);
+        profileName          = (TextView) header.findViewById(R.id.profileName);
+        profileEmail         = (TextView) header.findViewById(R.id.profileEmail);
+
+
         if (email != null){
             // Show user info in the drawer
             profileEmail.setText(email);
@@ -176,11 +185,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }else{
-            Menu menu            = this.leftNavigation.getMenu();
-            MenuItem logout      = menu.findItem(R.id.settings_logout);
-            MenuItem account     = menu.findItem(R.id.settings_profile);
-            View header = leftNavigation.getHeaderView(0);
-            ImageView profilePic = (ImageView) header.findViewById(R.id.UserProfilePhoto);
             logout.setVisible(false);
             account.setVisible(false);
             profilePic.setVisibility(View.INVISIBLE);
