@@ -65,25 +65,30 @@ public class ExploreFragment extends Fragment {
             }
         });
 
-        Thread thread = new Thread(new Runnable() {
+        final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 SpoonacularAPI spoon = new SpoonacularAPI();
                 ArrayList<Recipe> r = spoon.searchRecipe("random");
-
-                threadtag = false;
+                gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, r);
 
             }
         });
         thread.start();
 
-        while (!threadtag){
-            gridAdapter.notifyDataSetChanged();
+        try {
+            Thread.sleep(10000);                 //1000 毫秒，也就是1秒.
+            gridView.setAdapter(gridAdapter);
+
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
         }
+
 
         return view;
 
     }
+
 }
 
 //
