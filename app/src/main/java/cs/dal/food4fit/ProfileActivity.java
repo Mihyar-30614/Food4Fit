@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +34,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileActivity";
     TextView profileName, profilePassword, profileConfirm;
-    String name, oldName, oldEmail, password, confirm, photoUrl, oldPhotoUrl;
+    String name, oldName,facebook, oldEmail, password, confirm, photoUrl, oldPhotoUrl;
     Button updateInfo;
     FirebaseUser user;
     FirebaseAuth mAuth;
@@ -59,6 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
         oldName        = sharedPreferences.getString("DisplayName",null);
         oldPhotoUrl    = sharedPreferences.getString("Photo",null);
         oldEmail       = sharedPreferences.getString("Email", null);
+        facebook     = sharedPreferences.getString("Facebook", null);
 
         // Populate Layout with User Info
         profileName.setText(oldName);
@@ -67,6 +69,20 @@ public class ProfileActivity extends AppCompatActivity {
             oldPhotoUrl = "http://i.imgur.com/FlEXhZo.jpg?1";
         }
         loadProfilePic(oldPhotoUrl);
+
+        // Facebook can not change info using app
+        if (facebook != null){
+            if (facebook.equals("True")){
+                profilePhoto.setEnabled(false);
+                profileName.setEnabled(false);
+                profileName.setInputType(InputType.TYPE_NULL);
+                profilePassword.setEnabled(false);
+                profilePassword.setInputType(InputType.TYPE_NULL);
+                profileConfirm.setEnabled(false);
+                profileConfirm.setInputType(InputType.TYPE_NULL);
+                updateInfo.setEnabled(false);
+            }
+        }
     }
 
     public void updateUserInfo(View view){
@@ -82,7 +98,7 @@ public class ProfileActivity extends AppCompatActivity {
             oldName = "";
         }
         if (!oldName.equals(name)){
-            // TODO Update User Display Name
+            // Update User Display Name
             user = mAuth.getCurrentUser();
             UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
             user.updateProfile(request).addOnCompleteListener(new OnCompleteListener<Void>() {

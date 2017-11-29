@@ -162,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
         String email        = sharedPreferences.getString("Email",null);
         String name         = sharedPreferences.getString("DisplayName",null);
         String photo        = sharedPreferences.getString("Photo",null);
-        String facebook     = sharedPreferences.getString("Facebook", null);
 
         Menu menu            = this.leftNavigation.getMenu();
         MenuItem logout      = menu.findItem(R.id.settings_logout);
@@ -183,17 +182,6 @@ public class MainActivity extends AppCompatActivity {
                 photo = "http://i.imgur.com/FlEXhZo.jpg?1";
             }
             loadProfilePic(photo);
-
-            // Facebook can not change info using app
-            if (facebook != null){
-                if (facebook.equals("True")){
-                    profilePic.setEnabled(false);
-                    profileName.setEnabled(false);
-                    profileName.setInputType(InputType.TYPE_NULL);
-                    profileEmail.setEnabled(false);
-                    profileEmail.setInputType(InputType.TYPE_NULL);
-                }
-            }
         }else{
             // Hide Menu Element
             logout.setVisible(false);
