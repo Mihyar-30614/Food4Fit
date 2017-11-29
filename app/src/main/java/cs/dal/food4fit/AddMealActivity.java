@@ -45,9 +45,13 @@ public class AddMealActivity extends Activity {
     private int month;
     private int day;
 
-    static final int DATE_DIALOG_ID = 999;
+    private String str;
 
-    HashMap<String, cs.dal.food4fit.Calendar>findMP =new HashMap<>();
+
+    static final int DATE_DIALOG_ID = 999;
+    boolean tag = true;
+
+//    HashMap<String, cs.dal.food4fit.Calendar>findMP =new HashMap<>();
 
     FirebaseDatabase firebaseDBInstance = FirebaseDatabase.getInstance();
     DatabaseReference firebaseReference = firebaseDBInstance.getReference("MealCalendar");
@@ -72,7 +76,7 @@ public class AddMealActivity extends Activity {
         tvDisplayDate.setText(new StringBuilder()
                 // Month is 0 based, just add 1
                 .append(month + 1).append("-").append(day).append("-")
-                .append(year).append(" "));
+                .append(year));
 
 //        // Attach a listener to read the data at our posts reference
 //        firebaseReference.child("GraceTest").addValueEventListener(new ValueEventListener() {
@@ -105,21 +109,19 @@ public class AddMealActivity extends Activity {
 
                 Toast.makeText(AddMealActivity.this,mealtag+"/"+datestring,10).show();
 
-                MealPlan rawMP = new MealPlan(getData(R.array.image_idsbf),getData(R.array.image_idsbf),getData(R.array.image_idsbf));
-                cs.dal.food4fit.Calendar rawcalendar = new cs.dal.food4fit.Calendar("GraceTest",datestring,rawMP);
-
-                findMP.put(datestring,rawcalendar);
-
-
-                MealPlan tempMP = push2Mealplan(findMP, datestring,mealtag, getIntent().getIntExtra("ImageID",0));
-                cs.dal.food4fit.Calendar tempcalendar = new cs.dal.food4fit.Calendar("GraceTest",datestring,tempMP);
-                findMP.put(datestring,tempcalendar);
+//                MealPlan rawMP = new MealPlan(getData(R.array.image_idsbf),getData(R.array.image_idsbf),getData(R.array.image_idsbf));
+//                cs.dal.food4fit.Calendar rawcalendar = new cs.dal.food4fit.Calendar("GraceTest",datestring,rawMP);
 //
-//                firebaseReference.child("GraceTest").child(datestring).setValue(calendar);
+//                findMP.put(datestring,rawcalendar);
+//
+//
+//                MealPlan tempMP = push2Mealplan(findMP, datestring,mealtag, getIntent().getIntExtra("ImageID",0));
+//                cs.dal.food4fit.Calendar tempcalendar = new cs.dal.food4fit.Calendar("GraceTest",datestring,tempMP);
+//                findMP.put(datestring,tempcalendar);
 
-//            Intent mIntent = new Intent();
-//            mIntent.putExtra("mealtag", mealtag+"/"+datestring);
-//            setResult(RESULT_OK, mIntent);
+                int imageID = getIntent().getIntExtra("ImageID",0);
+
+                retrievedata(mealtag,datestring,imageID);
 
                 finish();
 
@@ -168,51 +170,112 @@ public class AddMealActivity extends Activity {
 
             // set selected date into textview
             tvDisplayDate.setText(new StringBuilder().append(month)
-                    .append("-").append(day).append("-").append(year)
-                    .append(" "));
+                    .append("-").append(day).append("-").append(year));
 
 
 
         }
     };
 
+//
+//    private void push2Calendar(HashMap<String, cs.dal.food4fit.Calendar> findMP, MealPlan mealPlan, String date, String user){
+//
+//        final cs.dal.food4fit.Calendar calendar = new cs.dal.food4fit.Calendar("Grace",date,mealPlan);
+//
+//        findMP.put(date,calendar);
+//
+//    }
+//
+//    public MealPlan push2Mealplan(HashMap<String, cs.dal.food4fit.Calendar> findMP, String date, String mealtag, int ImageID) {
+//        final MealPlan mealPlan = findMP.get(date).getMealPlan();
+//        Bitmap bitmap = BitmapFactory.decodeStream(getResources().openRawResource(ImageID));
+//        if(mealtag.matches("Breakfast")){
+//            mealPlan.getBreakfastList().add(new ImageItem(bitmap,"Image#",ImageID));
+//        }
+//        if(mealtag.matches("Lunch")){
+//            mealPlan.getLunchList().add(new ImageItem(bitmap,"Image#",ImageID));
+//        }
+//        if(mealtag.matches("Dinner")){
+//            mealPlan.getDinnerList().add(new ImageItem(bitmap,"Image#",ImageID));
+//        }
+//
+//        return mealPlan;
+//    }
+//
+//    private ArrayList<ImageItem> getData(int imagearray) {
+//        final ArrayList<ImageItem> imageItems = new ArrayList<>();
+//        TypedArray imgs = getResources().obtainTypedArray(imagearray);
+//
+//        //R.array.image_ids
+//        for (int i = 0; i < imgs.length(); i++) {
+//            Bitmap bitmap1 = BitmapFactory.decodeStream(getResources().openRawResource(imgs.getResourceId(i,-1)));
+//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
+//            imageItems.add(new ImageItem(bitmap1, "Image#" + i,imgs.getResourceId(i, -1)));
+//        }
+//        return imageItems;
+//    }
+private void retrievedata(final String mealtag, final String datestring, final int imageID){
 
-    private void push2Calendar(HashMap<String, cs.dal.food4fit.Calendar> findMP, MealPlan mealPlan, String date, String user){
+    FirebaseDatabase firebaseDBInstance = FirebaseDatabase.getInstance();
+    final DatabaseReference firebaseReference = firebaseDBInstance.getReference("MealCalendar");
 
-        final cs.dal.food4fit.Calendar calendar = new cs.dal.food4fit.Calendar("Grace",date,mealPlan);
+    // Attach a listener to read the data at our posts reference
+    firebaseReference.child("Grace").child(datestring).addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            if(tag){
+                tag = false;
+                if(dataSnapshot.getValue()!=null){
+                    str = dataSnapshot.getValue().toString();
+                    if(str != null){
+                        if(mealtag.matches("Breakfast")){
+                            firebaseReference.child("Grace").child(datestring).setValue(str+"B."+imageID+"/");
 
-        findMP.put(date,calendar);
+                        }
+                        if(mealtag.matches("Lunch")){
+                            firebaseReference.child("Grace").child(datestring).setValue(str+"L."+imageID+"/");
 
-    }
+                        }
+                        if(mealtag.matches("Dinner")){
+                            firebaseReference.child("Grace").child(datestring).setValue(str+"D."+imageID+"/");
 
-    public MealPlan push2Mealplan(HashMap<String, cs.dal.food4fit.Calendar> findMP, String date, String mealtag, int ImageID) {
-        final MealPlan mealPlan = findMP.get(date).getMealPlan();
-        Bitmap bitmap = BitmapFactory.decodeStream(getResources().openRawResource(ImageID));
-        if(mealtag.matches("Breakfast")){
-            mealPlan.getBreakfastList().add(new ImageItem(bitmap,"Image#",ImageID));
+                        }
+
+                    }
+                }
+
+                else{
+                    if(mealtag.matches("Breakfast")){
+                        firebaseReference.child("Grace").child(datestring).setValue("B."+imageID+"/");
+
+                    }
+                    if(mealtag.matches("Lunch")){
+                        firebaseReference.child("Grace").child(datestring).setValue("L."+imageID+"/");
+
+                    }
+                    if(mealtag.matches("Dinner")){
+                        firebaseReference.child("Grace").child(datestring).setValue("D."+imageID+"/");
+
+                    }
+                }
+
+            }
+
         }
-        if(mealtag.matches("Lunch")){
-            mealPlan.getLunchList().add(new ImageItem(bitmap,"Image#",ImageID));
-        }
-        if(mealtag.matches("Dinner")){
-            mealPlan.getDinnerList().add(new ImageItem(bitmap,"Image#",ImageID));
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            System.out.println("The read failed: " + databaseError.getCode());
         }
 
-        return mealPlan;
-    }
+    });
 
-    private ArrayList<ImageItem> getData(int imagearray) {
-        final ArrayList<ImageItem> imageItems = new ArrayList<>();
-        TypedArray imgs = getResources().obtainTypedArray(imagearray);
 
-        //R.array.image_ids
-        for (int i = 0; i < imgs.length(); i++) {
-            Bitmap bitmap1 = BitmapFactory.decodeStream(getResources().openRawResource(imgs.getResourceId(i,-1)));
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
-            imageItems.add(new ImageItem(bitmap1, "Image#" + i,imgs.getResourceId(i, -1)));
-        }
-        return imageItems;
-    }
+}
+
+public void addmeal(String mealtag,String datestring,int imageID){
+
+}
 
 
 }

@@ -1,8 +1,13 @@
 package cs.dal.food4fit;
 
 
+import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,54 +40,47 @@ import static android.app.Activity.RESULT_OK;
  */
 public class TodayFragment extends Fragment {
 
-//    public HashMap<String,Calendar>findMP;
-
-
-
     public TodayFragment() {
         // Required empty public constructor
     }
+
+    ArrayList<ImageItem> BreakfastList = new ArrayList<>();
+    ArrayList<ImageItem> LunchList = new ArrayList<>();
+    ArrayList<ImageItem> DinnerList = new ArrayList<>();
+    ListViewAdapter[] listviewAdapterList;
+    ArrayList<Object> meallist;
+    MealPlan mealPlan;
+    ListViewAdapter listviewAdapter;
+    Context context;
+    View todayview;
+    ListView listview;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        context = getContext();
+        todayview = inflater.inflate(R.layout.fragment_today, container, false);
+
         View view = inflater.inflate(R.layout.fragment_today, container, false);
-        ListView listview = (ListView) view.findViewById(R.id.MealList);
+
+        listview = (ListView) view.findViewById(R.id.MealList);
         FloatingActionButton goCalendar = (FloatingActionButton)view.findViewById(R.id.goCalendar);
         final int SECOND_ACTIVITY_RESULT_CODE = 0;
 
-        Date testdate = new Date();
-//
-//        FirebaseDatabase firebaseDBInstance = FirebaseDatabase.getInstance();
-//        DatabaseReference firebaseReference = firebaseDBInstance.getReference("MealCalendar");
-//
-//
-//        // Attach a listener to read the data at our posts reference
-//        firebaseReference.child("GraceTest").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Calendar calendar = dataSnapshot.getValue(Calendar.class);
-////                findMP.put(dataSnapshot.getKey(),calendar);
-//                Log.i("testtoday", dataSnapshot.getKey());
-//
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                System.out.println("The read failed: " + databaseError.getCode());
-//                Log.i("testtoday", "oncancel");
-//            }
-//        });
 
-//
-//        MainActivity test = (MainActivity)getActivity();
-//        ArrayList<Object> meallist = getML(getDateString(testdate),test.findMP);
-//
-//        ListViewAdapter listviewAdapter = new ListViewAdapter(getActivity(),meallist);
-//        listview.setAdapter(listviewAdapter);
+        mealPlan = new MealPlan(BreakfastList,LunchList,DinnerList);
+        meallist = getML(mealPlan);
+
+        listviewAdapter = new ListViewAdapter(getContext(), meallist);
+        listview.setAdapter(listviewAdapter);
+
+        final Date testdate = new Date();
+        retrievedata(getDateString(testdate));
+
 
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -108,6 +107,8 @@ public class TodayFragment extends Fragment {
             }
         });
 
+
+
         return view;
 
 
@@ -124,44 +125,48 @@ public class TodayFragment extends Fragment {
 
                 // get String data from Intent
                 final String returnString = data.getStringExtra("dateString");
-
+                final ListView listview = (ListView) getView().findViewById(R.id.MealList);
                 TextView textView = (TextView) getView().findViewById(R.id.datetag);
                 textView.setText(returnString);
-//
-//                MainActivity test = (MainActivity)getActivity();
-//                ArrayList<Object> meallist = getML(returnString,test.findMP);
-//                ListViewAdapter listviewAdapter = new ListViewAdapter(getActivity(),meallist);
-//                ListView listview = (ListView) getView().findViewById(R.id.MealList);
-//                listview.setAdapter(listviewAdapter);
+
+                retrievedata(returnString);
 
             }
         }
     }
 
-    private ArrayList<Object> getML(String datestring, HashMap<String,Calendar> findMP){
+    private ArrayList<Object> getML(MealPlan mealPlan){
         ArrayList<Object> meallist = new ArrayList<>();
 
-        if(findMP.get(datestring)!=null) {
-            Calendar calendar = findMP.get(datestring);
-            MealPlan mealPlan = calendar.getMealPlan();
+        if(mealPlan!=null&&(mealPlan.getDinnerList()!=null||mealPlan.getLunchList()!=null||mealPlan.getBreakfastList()!=null)) {
+
             ArrayList<ImageItem> breakfastlist = mealPlan.getBreakfastList();
             ArrayList<ImageItem> lunchlist = mealPlan.getLunchList();
             ArrayList<ImageItem> dinnerlist = mealPlan.getDinnerList();
 
             meallist.add(new String("Breakfast"));
-            for (int i = 0; i < breakfastlist.size(); i++) {
-                meallist.add(breakfastlist.get(i));
+            if(breakfastlist!=null){
+                for (int i = 0; i < breakfastlist.size(); i++) {
+                    meallist.add(breakfastlist.get(i));
+                }
             }
 
+
             meallist.add(new String("Lunch"));
-            for (int i = 0; i < lunchlist.size(); i++) {
-                meallist.add(lunchlist.get(i));
+            if(lunchlist!=null){
+                for (int i = 0; i < lunchlist.size(); i++) {
+                    meallist.add(lunchlist.get(i));
+                }
+
             }
 
             meallist.add(new String("Dinner"));
-            for (int i = 0; i < dinnerlist.size(); i++) {
-                meallist.add(dinnerlist.get(i));
+            if(dinnerlist!=null){
+                for (int i = 0; i < dinnerlist.size(); i++) {
+                    meallist.add(dinnerlist.get(i));
+                }
             }
+
         }
         else{
             meallist.add(new String("Breakfast"));
@@ -173,9 +178,71 @@ public class TodayFragment extends Fragment {
         return meallist;
     }
 
+    private ImageItem getRecipe(int imageID){
+
+        Bitmap bitmap = BitmapFactory.decodeResource(toolfunction.context.getResources(),imageID);
+        ImageItem imageitem = new ImageItem(bitmap,"Image#",imageID);
+        return imageitem;
+    }
+
     public static String getDateString(Date date) {
         DateFormat format =  new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH);
         return format.format(date);
+    }
+
+    private void retrievedata(String date){
+
+        FirebaseDatabase firebaseDBInstance = FirebaseDatabase.getInstance();
+        DatabaseReference firebaseReference = firebaseDBInstance.getReference("MealCalendar");
+
+        // Attach a listener to read the data at our posts reference
+        firebaseReference.child("Grace").child(date).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                BreakfastList = new ArrayList<>();
+                LunchList = new ArrayList<>();
+                DinnerList = new ArrayList<>();
+
+
+
+                if(dataSnapshot.getValue()!=null){
+
+                    String Meal = dataSnapshot.getValue().toString();
+                    String[] splited = Meal.split("/");
+                    int[] ImageID=new int[splited.length];
+
+                    for(int i=0;i<splited.length;i++) {
+                        ImageID[i] = Integer.parseInt(splited[i].substring(2));
+
+                        ImageItem imageitem = getRecipe(ImageID[i]);
+
+                        if (splited[i].startsWith("B")) {
+                            BreakfastList.add(imageitem);
+                        }
+                        if (splited[i].startsWith("L")) {
+                            LunchList.add(imageitem);
+                        }
+                        if (splited[i].startsWith("D")) {
+                            DinnerList.add(imageitem);
+                        }
+                    }
+
+
+                }
+                mealPlan = new MealPlan(BreakfastList,LunchList,DinnerList);
+                meallist = getML(mealPlan);
+                listviewAdapter = new ListViewAdapter(context,meallist);
+                listview.setAdapter(listviewAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+
+        });
+
     }
 
 
