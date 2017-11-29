@@ -46,7 +46,8 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
             in = new BufferedInputStream(connect.getInputStream());
             Scanner sReader = new Scanner(new InputStreamReader(in));
             try {
-                result = sReader.nextLine();
+                while (sReader.hasNextLine())
+                    result += sReader.nextLine();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
