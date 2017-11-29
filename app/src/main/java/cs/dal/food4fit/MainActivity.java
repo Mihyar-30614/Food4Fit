@@ -243,12 +243,14 @@ public class MainActivity extends AppCompatActivity {
             loadProfilePic(photo);
 
             // Facebook can not change info using app
-            if (facebook.equals("True")){
-                profilePic.setEnabled(false);
-                profileName.setEnabled(false);
-                profileName.setInputType(InputType.TYPE_NULL);
-                profileEmail.setEnabled(false);
-                profileEmail.setInputType(InputType.TYPE_NULL);
+            if (facebook != null){
+                if (facebook.equals("True")){
+                    profilePic.setEnabled(false);
+                    profileName.setEnabled(false);
+                    profileName.setInputType(InputType.TYPE_NULL);
+                    profileEmail.setEnabled(false);
+                    profileEmail.setInputType(InputType.TYPE_NULL);
+                }
             }
         }else{
             // Hide Menu Element
