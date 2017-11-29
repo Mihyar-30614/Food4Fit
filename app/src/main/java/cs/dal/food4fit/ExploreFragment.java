@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -27,8 +28,6 @@ public class ExploreFragment extends Fragment {
     private GridView gridView;
     private GridViewAdapter gridAdapter;
     private Context context;
-
-
 
     public ExploreFragment() {
         // Required empty public constructor
@@ -48,7 +47,14 @@ public class ExploreFragment extends Fragment {
         gridView = (GridView) view.findViewById(R.id.gridView);
         gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, getData());
         gridView.setAdapter(gridAdapter);
-
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SpoonacularAPI spoon = new SpoonacularAPI();
+                ArrayList<Recipe> r = spoon.searchRecipe("random");
+            }
+        });
+        thread.start();
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick (AdapterView< ? > parent, View v, int position, long id){
