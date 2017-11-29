@@ -28,16 +28,21 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 import static cs.dal.food4fit.R.menu.settings;
+import static cs.dal.food4fit.TodayFragment.getDateString;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -101,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.settings_logout:
                     signOut();
                     return true;
+                case R.id.settings_profile:
+                    goProfile();
+                    return true;
             }
             return false;
         }
@@ -136,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 slideOpen = false;
+                // Handle Side menu
+                menuController();
             }
             // Drawer completely open
             public void onDrawerOpened(View drawerView) {
@@ -185,9 +195,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }else{
+            // Hide Menu Element
             logout.setVisible(false);
             account.setVisible(false);
             profilePic.setVisibility(View.INVISIBLE);
+            profileEmail.setVisibility(View.INVISIBLE);
+            profileName.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -220,6 +233,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this,LoginActivity.class));
     }
 
+    // Go to User Profile
+    public void goProfile (){
+        startActivity(new Intent(this, ProfileActivity.class));
+    }
+
     // Open and close Navigation Bar using icon
     public void navigationBar (View view){
         if (slideOpen){
@@ -242,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
     public void signOut (){
         // Sign out user
         FirebaseAuth.getInstance().signOut();
+        LoginManager.getInstance().logOut();
         // Clear saved info
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
