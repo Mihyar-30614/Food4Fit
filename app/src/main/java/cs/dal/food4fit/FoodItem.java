@@ -91,6 +91,10 @@ public class FoodItem {
 
     public void setImg(String img) { this.img = img; }
 
+    public Bitmap getPhoto() { return photo; }
+
+    public void setPhoto(Bitmap photo) { this.photo = photo; }
+
     @Override
     public String toString() {
         return "FoodItem{" +

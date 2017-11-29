@@ -110,19 +110,6 @@ public class MainActivity extends AppCompatActivity {
         android.support.v4.app.FragmentTransaction todayTransction = getSupportFragmentManager().beginTransaction();
         todayTransction.replace(R.id.content, todayFragment).commit();
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Recipe r = new Recipe();
-                    r.getItem("pizza");
-                    String item = r.getName();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -168,9 +155,7 @@ public class MainActivity extends AppCompatActivity {
             MenuItem logout      = menu.findItem(R.id.settings_logout);
             MenuItem account     = menu.findItem(R.id.settings_profile);
             View header = leftNavigation.getHeaderView(0);
-            ImageView profilePic = (ImageView) header.findViewById(R.id.profilePhoto);
-
-
+            ImageView profilePic = (ImageView) header.findViewById(R.id.UserProfilePhoto);
             logout.setVisible(false);
             account.setVisible(false);
             profilePic.setVisibility(View.INVISIBLE);

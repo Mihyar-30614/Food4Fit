@@ -66,7 +66,7 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
     public ArrayList<Recipe> searchRecipe(String name) {
         String type;
         if (name.equals("random")) {
-            doInBackground("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/random?limitLicense=false&number=50");
+            doInBackground("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/random?limitLicense=false&number=5");
             name = "recipes";
         }
         else {
@@ -82,6 +82,7 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
             for (int i = 0; i < jArr.length(); i++) {
                 JSONObject r = jArr.getJSONObject(i);
                 Recipe recipe = generateRecipe(r);
+                recipe = getRecipe(recipe.id);
                 recipeList.add(recipe);
             }
         } catch (final JSONException e) {
@@ -97,12 +98,7 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
         try {
             JSONObject jsonObj = new JSONObject(result);
             result = "";
-            f.setName(jsonObj.getString("title"));
-            JSONObject nutrition = jsonObj.getJSONObject("nutrition");
-            f.setCalories(nutrition.getInt("calories"));
-            f.setFat(nutrition.getString("fat"));
-            f.setProtein(nutrition.getString("protein"));
-            f.setCarbs(nutrition.getString("carbs"));
+            f = generateFoodItem(jsonObj);
         } catch (final JSONException e) {
             e.printStackTrace();
         }
@@ -124,17 +120,61 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
 
     public Recipe generateRecipe(JSONObject j) {
         Recipe r = new Recipe();
+        ArrayList<FoodItem> ingredients = new ArrayList<FoodItem>();
         try {
             r.setName(j.getString("title"));
-            r.setId(Integer.parseInt(j.getString("id")));
-            r.setIngredients(j.getString("extendedIngredients"));
+            r.setId(j.getInt("id"));
+            JSONArray foodItems = j.getJSONArray("extendedIngredients");
+            for (int i = 0; i < foodItems.length(); i++) {
+                JSONObject food = foodItems.getJSONObject(i);
+                FoodItem f = getFoodItem(food.getInt("id"));
+                ingredients.add(f);
+            }
+            r.setIngredients(ingredients);
             r.setInstructions(j.getString("instructions"));
             r.setImg(j.getString("image"));
+            r.setPhoto(convert(r.img));
             r.setTime(j.getInt("readyInMinutes"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return r;
+    }
+
+    public FoodItem generateFoodItem(JSONObject j) {
+        FoodItem f = new FoodItem();
+        try {
+            f.setName(j.getString("title"));
+            f.setId(j.getInt("id"));
+            JSONObject nutrition = j.getJSONObject("nutrition");
+            f.setCalories(nutrition.getInt("calories"));
+            f.setFat(nutrition.getString("fat"));
+            f.setProtein(nutrition.getString("protein"));
+            f.setCarbs(nutrition.getString("carbs"));
+            JSONArray images = j.getJSONArray("images");
+            f.setImg(images.getString(0));
+            f.setPhoto(convert(f.img));
+        } catch (final JSONException e) {
+            e.printStackTrace();
+        }
+        return f;
+    }
+
+    public Bitmap convert(String img) {
+        if (img.equals("null"))
+            img = "http://www.catergrab.com/public/images/restaurant-default.png";
+        try {
+            url = new URL(img);
+            connect = (HttpURLConnection)url.openConnection();
+            connect.setDoInput(true);
+            connect.connect();
+            in = connect.getInputStream();
+            Bitmap bitmap = BitmapFactory.decodeStream(in);
+            return bitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
