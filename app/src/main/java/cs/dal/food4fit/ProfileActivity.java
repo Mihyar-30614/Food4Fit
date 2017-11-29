@@ -1,5 +1,7 @@
 package cs.dal.food4fit;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,6 +35,7 @@ import java.net.URL;
 public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileActivity";
+    private static final int CAMERA_PIC_REQUEST = 1337;
     TextView profileName, profilePassword, profileConfirm;
     String name, oldName,facebook, oldEmail, password, confirm, photoUrl, oldPhotoUrl;
     Button updateInfo;
@@ -82,6 +85,23 @@ public class ProfileActivity extends AppCompatActivity {
                 profileConfirm.setInputType(InputType.TYPE_NULL);
                 updateInfo.setEnabled(false);
             }
+        }
+
+        // Add listener to Profile Photo
+        profilePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
+            }
+        });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_PIC_REQUEST) {
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+            ImageView imageview = (ImageView) findViewById(R.id.profile_photo); //sets imageview as the bitmap
+            imageview.setImageBitmap(image);
         }
     }
 
