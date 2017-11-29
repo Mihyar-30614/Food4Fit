@@ -51,7 +51,7 @@ public class ExploreFragment extends Fragment {
             @Override
             public void run() {
                 SpoonacularAPI spoon = new SpoonacularAPI();
-                Recipe r = spoon.getRecipe(19619);
+                ArrayList<Recipe> r = spoon.searchRecipe("random");
             }
         });
         thread.start();

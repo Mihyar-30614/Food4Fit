@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,7 +32,7 @@ public class Recipe {
 
     String name;
     int id;
-    String ingredients;
+    ArrayList<FoodItem> ingredients;
     String instructions;
     String img;
     Bitmap photo;
@@ -39,7 +40,7 @@ public class Recipe {
 
     public Recipe() { }
 
-    public Recipe(String name, String ingredients, String instructions, Bitmap photo,
+    public Recipe(String name, ArrayList<FoodItem> ingredients, String instructions, Bitmap photo,
                   int time, int serving) {
         this.name = name;
         this.ingredients = ingredients;
@@ -60,11 +61,11 @@ public class Recipe {
 
     public void setId(int id) { this.id = id; }
 
-    public String getIngredients() {
+    public ArrayList<FoodItem> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(String ingredients) {
+    public void setIngredients(ArrayList<FoodItem> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -79,6 +80,10 @@ public class Recipe {
     public String getImg() { return img; }
 
     public void setImg(String img) { this.img = img; }
+
+    public Bitmap getPhoto() { return photo; }
+
+    public void setPhoto(Bitmap photo) { this.photo = photo; }
 
     public int getTime() {
         return time;

@@ -76,12 +76,12 @@ public class TodayFragment extends Fragment {
 //            }
 //        });
 
-
-        MainActivity test = (MainActivity)getActivity();
-        ArrayList<Object> meallist = getML(getDateString(testdate),test.findMP);
-
-        ListViewAdapter listviewAdapter = new ListViewAdapter(getActivity(),meallist);
-        listview.setAdapter(listviewAdapter);
+//
+//        MainActivity test = (MainActivity)getActivity();
+//        ArrayList<Object> meallist = getML(getDateString(testdate),test.findMP);
+//
+//        ListViewAdapter listviewAdapter = new ListViewAdapter(getActivity(),meallist);
+//        listview.setAdapter(listviewAdapter);
 
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -127,12 +127,12 @@ public class TodayFragment extends Fragment {
 
                 TextView textView = (TextView) getView().findViewById(R.id.datetag);
                 textView.setText(returnString);
-
-                MainActivity test = (MainActivity)getActivity();
-                ArrayList<Object> meallist = getML(returnString,test.findMP);
-                ListViewAdapter listviewAdapter = new ListViewAdapter(getActivity(),meallist);
-                ListView listview = (ListView) getView().findViewById(R.id.MealList);
-                listview.setAdapter(listviewAdapter);
+//
+//                MainActivity test = (MainActivity)getActivity();
+//                ArrayList<Object> meallist = getML(returnString,test.findMP);
+//                ListViewAdapter listviewAdapter = new ListViewAdapter(getActivity(),meallist);
+//                ListView listview = (ListView) getView().findViewById(R.id.MealList);
+//                listview.setAdapter(listviewAdapter);
 
             }
         }
