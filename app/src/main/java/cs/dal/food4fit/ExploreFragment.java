@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -65,24 +66,27 @@ public class ExploreFragment extends Fragment {
             }
         });
 
-        final Thread thread = new Thread(new Runnable() {
+
+        class load extends AsyncTask<String, Void, String> {
+
             @Override
-            public void run() {
+            protected String doInBackground(String... strings) {
                 SpoonacularAPI spoon = new SpoonacularAPI();
                 ArrayList<Recipe> r = spoon.searchRecipe("random");
                 gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, r);
 
+                return null;
             }
-        });
-        thread.start();
 
-        try {
-            Thread.sleep(10000);                 //1000 毫秒，也就是1秒.
-            gridView.setAdapter(gridAdapter);
-
-        } catch(InterruptedException ex) {
-            Thread.currentThread().interrupt();
+            @Override
+            protected void onPostExecute(String result) {
+                gridView.setAdapter(gridAdapter);
+            }
         }
+
+        new load().execute("");
+
+
 
 
         return view;
