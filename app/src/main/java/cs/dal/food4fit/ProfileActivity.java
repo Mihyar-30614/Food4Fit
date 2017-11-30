@@ -65,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Bitmap image;
+    Uri downloadUrl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,9 +147,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                editor.putString("Photo", String.valueOf(downloadUrl));
-                editor.apply();
+                downloadUrl = taskSnapshot.getDownloadUrl();
             }
         });
     }
@@ -165,10 +164,10 @@ public class ProfileActivity extends AppCompatActivity {
         if (oldName == null){
             oldName = "";
         }
-        if (!oldName.equals(name)){
+        if (!oldName.equals(name) || downloadUrl != null){
             // Update User Display Name
             user = mAuth.getCurrentUser();
-            UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
+            UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setDisplayName(name).setPhotoUri(downloadUrl).build();
             user.updateProfile(request).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -176,6 +175,9 @@ public class ProfileActivity extends AppCompatActivity {
                         user = mAuth.getCurrentUser();
                         editor = sharedPreferences.edit();
                         editor.putString("DisplayName", user.getDisplayName());
+                        if (downloadUrl != null){
+                            editor.putString("Photo", String.valueOf(downloadUrl));
+                        }
                         editor.apply();
                         Toast.makeText(ProfileActivity.this, "Name Update Success!",Toast.LENGTH_SHORT).show();
                         finish();
