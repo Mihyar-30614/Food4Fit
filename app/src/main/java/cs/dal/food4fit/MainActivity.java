@@ -258,4 +258,7 @@ public class MainActivity extends AppCompatActivity {
         // Recreate the content
         menuController();
     }
+        public void openMap(View view) {
+        startActivity(new Intent(this,MapsActivity.class));
+    }
 }
