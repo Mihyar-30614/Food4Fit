@@ -8,13 +8,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="com.google.android.providers.gsf.permisson.READ_GSERVICES"/>
-    
-     <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-    
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,6 +22,10 @@
         android:hardwareAccelerated="false"
         android:theme="@style/AppTheme"
         android:name="cs.dal.food4fit.toolfunction">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -35,15 +36,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        
-        //google maps activity
+
         <activity
             android:name=".MapsActivity"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="stateHidden" />
-            
-            
         <activity
             android:name=".LoginActivity"
             android:parentActivityName=".MainActivity"
@@ -71,12 +68,11 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="Food4Fit" />
-         
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
