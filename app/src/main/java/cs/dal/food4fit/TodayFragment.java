@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,9 +45,9 @@ public class TodayFragment extends Fragment {
         // Required empty public constructor
     }
 
-    ArrayList<ImageItem> BreakfastList = new ArrayList<>();
-    ArrayList<ImageItem> LunchList = new ArrayList<>();
-    ArrayList<ImageItem> DinnerList = new ArrayList<>();
+    ArrayList<Recipe> BreakfastList = new ArrayList<>();
+    ArrayList<Recipe> LunchList = new ArrayList<>();
+    ArrayList<Recipe> DinnerList = new ArrayList<>();
     ListViewAdapter[] listviewAdapterList;
     ArrayList<Object> meallist;
     MealPlan mealPlan;
@@ -54,6 +55,7 @@ public class TodayFragment extends Fragment {
     Context context;
     View todayview;
     ListView listview;
+    Recipe imageitem;
 
 
     @Override
@@ -86,12 +88,12 @@ public class TodayFragment extends Fragment {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick (AdapterView< ? > parent, View v, int position, long id){
-                if(parent.getItemAtPosition(position)instanceof ImageItem){
-                    ImageItem item = (ImageItem) parent.getItemAtPosition(position);
+                if(parent.getItemAtPosition(position)instanceof Recipe){
+                    Recipe item = (Recipe) parent.getItemAtPosition(position);
 
                     //Create intent
                     Intent intent = new Intent(getActivity(), RecipeActivity.class);
-                    intent.putExtra("imageID", item.getImageID());
+                    intent.putExtra("imageID", item.getId());
                     startActivity(intent);
                 }
             }
@@ -140,9 +142,9 @@ public class TodayFragment extends Fragment {
 
         if(mealPlan!=null&&(mealPlan.getDinnerList()!=null||mealPlan.getLunchList()!=null||mealPlan.getBreakfastList()!=null)) {
 
-            ArrayList<ImageItem> breakfastlist = mealPlan.getBreakfastList();
-            ArrayList<ImageItem> lunchlist = mealPlan.getLunchList();
-            ArrayList<ImageItem> dinnerlist = mealPlan.getDinnerList();
+            ArrayList<Recipe> breakfastlist = mealPlan.getBreakfastList();
+            ArrayList<Recipe> lunchlist = mealPlan.getLunchList();
+            ArrayList<Recipe> dinnerlist = mealPlan.getDinnerList();
 
             meallist.add(new String("Breakfast"));
             if(breakfastlist!=null){
@@ -178,12 +180,12 @@ public class TodayFragment extends Fragment {
         return meallist;
     }
 
-    private ImageItem getRecipe(int imageID){
-
-        Bitmap bitmap = BitmapFactory.decodeResource(toolfunction.context.getResources(),imageID);
-        ImageItem imageitem = new ImageItem(bitmap,"Image#",imageID);
-        return imageitem;
-    }
+//    private Recipe getRecipe(int imageID){
+//
+//        Bitmap bitmap = BitmapFactory.decodeResource(toolfunction.context.getResources(),imageID);
+//        Recipe imageitem = new Recipe(bitmap,"Image#",imageID);
+//        return imageitem;
+//    }
 
     public static String getDateString(Date date) {
         DateFormat format =  new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH);
@@ -215,7 +217,25 @@ public class TodayFragment extends Fragment {
                     for(int i=0;i<splited.length;i++) {
                         ImageID[i] = Integer.parseInt(splited[i].substring(2));
 
-                        ImageItem imageitem = getRecipe(ImageID[i]);
+                        final int tempID = ImageID[i];
+
+                        final Thread thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SpoonacularAPI spoon = new SpoonacularAPI();
+                                imageitem = spoon.getRecipe(tempID);
+
+                            }
+                        });
+                        thread.start();
+
+
+                        try {
+                            Thread.sleep(2000);                 //1000 毫秒，也就是1秒.
+
+                        } catch(InterruptedException ex) {
+                            Thread.currentThread().interrupt();
+                        }
 
                         if (splited[i].startsWith("B")) {
                             BreakfastList.add(imageitem);
@@ -242,6 +262,21 @@ public class TodayFragment extends Fragment {
             }
 
         });
+
+    }
+
+    private Recipe retrieveData(final int tempID) {
+
+//        final Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                SpoonacularAPI spoon = new SpoonacularAPI();
+//                imageitem = spoon.getRecipe(tempID);
+//
+//            }
+//        });
+//        thread.start();
+        return imageitem;
 
     }
 
