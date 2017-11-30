@@ -71,5 +71,43 @@
         <item>@drawable/n5</item>
 
     </string-array>
+    
+        <string name = "food">FoodFit</string>
+    <string name="ok"><font color='blue'>OK</font></string>
+    <string name="clear"><font color='blue'>Clear</font></string>
+    <string name="dialog"><font color='blue'>shop</font></string>
+    <string name="shopapp"><font color='yellow'>Items to get</font></string>
+    <string-array name="shop" >
+
+        <item>pork and sauce</item>
+        <item>bean and sauce</item>
+        <item>liver</item>
+        <item>ham and organic cheese</item>
+        <item>crab</item>
+        <item>chicken</item>
+        <item>lemongrass</item>
+        <item>red chilli</item>
+        <item>black pepper</item>
+        <item>salt</item>
+        <item>flour</item>
+        <item>oats</item>
+        <item>green germ</item>
+        <item>watermelon</item>
+        <item>mango</item>
+        <item>strawberry</item>
+        <item>tomotoes</item>
+        <item>kiwi</item>
+        <item>cranberry</item>
+        <item>Onion</item>
+        <item>Sausage</item>
+        <item>Milk</item>
+        <item>Garlic</item>
+        <item>Beef</item>
+        <item>Veggies</item>
+        <item>Olive</item>
+        <item>Cheese</item>
+        <item>Tuna</item>
+        <item>Mushrooms</item>
+    </string-array>
 
 </resources>
