@@ -20,11 +20,11 @@ import javax.net.ssl.HttpsURLConnection;
 public class FoodItem {
 
     String name;
-    int calories;
+    /*int calories;
     String fat;
     String protein;
-    String carbs;
-    int quantity;
+    String carbs;*/
+    String quantity;
     int id;
     String img;
     Bitmap photo;
@@ -34,10 +34,10 @@ public class FoodItem {
     public FoodItem(String name, int calories, String fat,
                     String protein, String carbs, int id) {
         this.name = name;
-        this.calories = calories;
+        /*this.calories = calories;
         this.fat = fat;
         this.protein = protein;
-        this.carbs = carbs;
+        this.carbs = carbs;*/
         this.id = id;
     }
 
@@ -49,7 +49,7 @@ public class FoodItem {
         this.name = name;
     }
 
-    public int getCalories() {
+    /*public int getCalories() {
         return calories;
     }
 
@@ -73,13 +73,13 @@ public class FoodItem {
 
     public String getCarbs() { return carbs; }
 
-    public void setCarbs(String carbs) { this.carbs = carbs; }
+    public void setCarbs(String carbs) { this.carbs = carbs; }*/
 
-    public int getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity() {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 
@@ -99,10 +99,7 @@ public class FoodItem {
     public String toString() {
         return "FoodItem{" +
                 "name='" + name + '\'' +
-                ", calories='" + calories + '\'' +
-                ", fat='" + fat + '\'' +
-                ", protein='" + protein + '\'' +
-                ", carbs='" + carbs + '\'' +
+                "img='" + img + '\'' +
                 '}';
     }
 
