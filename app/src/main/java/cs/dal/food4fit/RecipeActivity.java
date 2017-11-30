@@ -1,6 +1,7 @@
 package cs.dal.food4fit;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.FloatingActionButton;
@@ -28,17 +29,18 @@ public class RecipeActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private Recipe imageitem;
+    private ArrayList<FoodItem> ingredients;
+    private String directions = "";
+    private String foods = "";
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_recipe1);
 
         final int imageID = getIntent().getIntExtra("imageID",0);
-//        Bitmap photo = (Bitmap) getIntent().getParcelableExtra("photo");
-
-
-
 
         final Thread thread = new Thread(new Runnable() {
             @Override
@@ -51,28 +53,46 @@ public class RecipeActivity extends AppCompatActivity {
         thread.start();
 
         try {
-            Thread.sleep(1000);                 //1000 毫秒，也就是1秒.
+            Thread.sleep(3000);                 //1000 毫秒，也就是1秒.
 
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
 
-        setContentView(R.layout.activity_recipe1);
 
         ImageView imageView = (ImageView) findViewById(R.id.headerImage);
         imageView.setImageBitmap(imageitem.getPhoto());
 
+        ingredients = imageitem.getIngredients();
+        directions = imageitem.getInstructions();
+
+        for(int i = 0; i<ingredients.size();i++){
+            FoodItem foodItem =ingredients.get(i);
+            foods=foods+foodItem.getName()+"/"+foodItem.getId()+"!";
+        }
+
+
+        SharedPreferences sharedRecipe = getSharedPreferences("Recipe", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedRecipe.edit();
+        editor.putString("ing",foods);
+        editor.putString("dir",directions);
+        editor.commit();
+
+
         mRecipePageAdapter = new RecipePageAdapter(getSupportFragmentManager());
+
 
         // Set up the RecipePager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-        setupViewPager(mViewPager);
+        mRecipePageAdapter.addFragment(new DirectionsFragment(), "Directions");
+        mRecipePageAdapter.addFragment(new IngredientsFragment(), "Ingredients");
+        mViewPager.setAdapter(mRecipePageAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
         FloatingActionButton addMeal = (FloatingActionButton)findViewById(R.id.addmeal);
-//        final int SECOND_ACTIVITY_RESULT_CODE = 0;
+
         addMeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,15 +103,19 @@ public class RecipeActivity extends AppCompatActivity {
 
             }
         });
+
+        FloatingActionButton timer = (FloatingActionButton)findViewById(R.id.timer);
+
+        timer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Create intent to choose date
+//                Intent intent = new Intent(RecipeActivity.this, timer.class);
+//                intent.putExtra("Timer", imageitem.getTime());
+//                startActivity(intent);
+
+            }
+        });
     }
-
-
-    private void setupViewPager(ViewPager viewPager) {
-        RecipePageAdapter adapter = new RecipePageAdapter(getSupportFragmentManager());
-        adapter.addFragment(new IngredientsFragment(), "Ingredients");
-        adapter.addFragment(new DirectionsFragment(), "Directions");
-        viewPager.setAdapter(adapter);
-    }
-
 
 }
