@@ -231,7 +231,7 @@ public class TodayFragment extends Fragment {
 
 
                         try {
-                            Thread.sleep(2000);                 //1000 毫秒，也就是1秒.
+                            Thread.sleep(5000);                 //1000 毫秒，也就是1秒.
 
                         } catch(InterruptedException ex) {
                             Thread.currentThread().interrupt();

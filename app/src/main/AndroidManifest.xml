@@ -3,7 +3,7 @@
     package="cs.dal.food4fit">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <!--<uses-permission android:name="android.permission.CAMERA"/>-->
     <uses-feature android:name="android.hardware.camera" android:required="true"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
 
@@ -42,7 +42,14 @@
         <activity
             android:name=".ProfileActivity"
             android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="fit4food" android:host="callback" />
+            </intent-filter>
+        </activity>
         <!-- Facebook Login Begin -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

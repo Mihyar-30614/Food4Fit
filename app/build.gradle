@@ -30,6 +30,7 @@ dependencies {
     // Adding Firebase dependencies
     compile 'com.google.firebase:firebase-core:11.0.4'
     compile 'com.google.firebase:firebase-database:11.0.4'
+    compile 'com.google.firebase:firebase-storage:11.0.4'
     // Facebook Login
     compile 'com.facebook.android:facebook-login:[4,5)'
     testCompile 'junit:junit:4.12'
