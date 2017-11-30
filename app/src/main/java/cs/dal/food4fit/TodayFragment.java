@@ -55,7 +55,6 @@ public class TodayFragment extends Fragment {
     Context context;
     View todayview;
     ListView listview;
-    Recipe imageitem;
 
 
     @Override
@@ -212,30 +211,15 @@ public class TodayFragment extends Fragment {
 
                     String Meal = dataSnapshot.getValue().toString();
                     String[] splited = Meal.split("/");
-                    int[] ImageID=new int[splited.length];
+                    final int[] ImageID=new int[splited.length];
 
                     for(int i=0;i<splited.length;i++) {
                         ImageID[i] = Integer.parseInt(splited[i].substring(2));
 
-                        final int tempID = ImageID[i];
+//                        Recipe imageitem = getRecipe(ImageID[i]);
 
-                        final Thread thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
                                 SpoonacularAPI spoon = new SpoonacularAPI();
-                                imageitem = spoon.getRecipe(tempID);
-
-                            }
-                        });
-                        thread.start();
-
-
-                        try {
-                            Thread.sleep(2000);                 //1000 毫秒，也就是1秒.
-
-                        } catch(InterruptedException ex) {
-                            Thread.currentThread().interrupt();
-                        }
+                                Recipe imageitem = spoon.getRecipe(ImageID[i]);
 
                         if (splited[i].startsWith("B")) {
                             BreakfastList.add(imageitem);
@@ -262,21 +246,6 @@ public class TodayFragment extends Fragment {
             }
 
         });
-
-    }
-
-    private Recipe retrieveData(final int tempID) {
-
-//        final Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                SpoonacularAPI spoon = new SpoonacularAPI();
-//                imageitem = spoon.getRecipe(tempID);
-//
-//            }
-//        });
-//        thread.start();
-        return imageitem;
 
     }
 

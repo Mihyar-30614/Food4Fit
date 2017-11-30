@@ -27,7 +27,6 @@ public class RecipeActivity extends AppCompatActivity {
     private RecipePageAdapter mRecipePageAdapter;
 
     private ViewPager mViewPager;
-    private Recipe imageitem;
 
 
     @Override
@@ -35,32 +34,11 @@ public class RecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         final int imageID = getIntent().getIntExtra("imageID",0);
-//        Bitmap photo = (Bitmap) getIntent().getParcelableExtra("photo");
-
-
-
-
-        final Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SpoonacularAPI spoon = new SpoonacularAPI();
-                imageitem = spoon.getRecipe(imageID);
-
-            }
-        });
-        thread.start();
-
-        try {
-            Thread.sleep(1000);                 //1000 毫秒，也就是1秒.
-
-        } catch(InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
 
         setContentView(R.layout.activity_recipe1);
 
         ImageView imageView = (ImageView) findViewById(R.id.headerImage);
-        imageView.setImageBitmap(imageitem.getPhoto());
+        imageView.setImageResource(imageID);
 
         mRecipePageAdapter = new RecipePageAdapter(getSupportFragmentManager());
 

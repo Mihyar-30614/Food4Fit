@@ -35,7 +35,6 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
     InputStream in;
     String line;
 
-    //accepts a URL and connects to Spoonacular API, returns a JSONObject
     @Override
     public Void doInBackground (String... strings) {
         try {
@@ -46,8 +45,7 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
             in = new BufferedInputStream(connect.getInputStream());
             Scanner sReader = new Scanner(new InputStreamReader(in));
             try {
-                while (sReader.hasNextLine())
-                    result += sReader.nextLine();
+                result = sReader.nextLine();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -65,7 +63,6 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
         return null;
     }
 
-    //searches based on a keyword or "random", returns an ArrayList of Recipe objects
     public ArrayList<Recipe> searchRecipe(String name) {
         String type;
         if (name.equals("random")) {
@@ -94,8 +91,8 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
         return recipeList;
     }
 
-    /*public FoodItem getFoodItem(int id) {
-        doInBackground("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/ingredients/" + id + "/information");
+    public FoodItem getFoodItem(int id) {
+        doInBackground("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/menuItems/" + id);
         FoodItem f = new FoodItem();
         f.setId(id);
         try {
@@ -106,9 +103,8 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
             e.printStackTrace();
         }
         return f;
-    }*/
+    }
 
-    //searches for a specific recipe based on a known ID integer
     public Recipe getRecipe(int id) {
         doInBackground("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/" + id + "/information");
         Recipe r = new Recipe();
@@ -122,7 +118,6 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
         return r;
     }
 
-    //passes in a JSONObject and pulls the relevant information for instantiating a Recipe object
     public Recipe generateRecipe(JSONObject j) {
         Recipe r = new Recipe();
         ArrayList<FoodItem> ingredients = new ArrayList<FoodItem>();
@@ -130,16 +125,10 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
             r.setName(j.getString("title"));
             r.setId(j.getInt("id"));
             JSONArray foodItems = j.getJSONArray("extendedIngredients");
-            //for loop access a JSONArray within the JSONObject and creates FoodItem objects
             for (int i = 0; i < foodItems.length(); i++) {
                 JSONObject food = foodItems.getJSONObject(i);
-                FoodItem f = new FoodItem();
-                f.setId(food.getInt("id"));
-                f.setName(food.getString("name"));
-                f.setImg(food.getString("image"));
-                f.setPhoto(convert(f.img));
-                f.setQuantity(food.getString("amount") + " " + food.getString("unit"));
-                ingredients.add(f); //ingredients is an ArrayList of FoodItems stored in Recipe
+                FoodItem f = getFoodItem(food.getInt("id"));
+                ingredients.add(f);
             }
             r.setIngredients(ingredients);
             r.setInstructions(j.getString("instructions"));
@@ -152,18 +141,25 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
         return r;
     }
 
-    /*public FoodItem generateFoodItem(JSONObject j) {
+    public FoodItem generateFoodItem(JSONObject j) {
         FoodItem f = new FoodItem();
         try {
-            f.setName(j.getString("name"));
+            f.setName(j.getString("title"));
             f.setId(j.getInt("id"));
+            JSONObject nutrition = j.getJSONObject("nutrition");
+            f.setCalories(nutrition.getInt("calories"));
+            f.setFat(nutrition.getString("fat"));
+            f.setProtein(nutrition.getString("protein"));
+            f.setCarbs(nutrition.getString("carbs"));
+            JSONArray images = j.getJSONArray("images");
+            f.setImg(images.getString(0));
+            f.setPhoto(convert(f.img));
         } catch (final JSONException e) {
             e.printStackTrace();
         }
         return f;
-    }*/
+    }
 
-    //passes in an address of a URL and returns a Bitmap for the FoodItem or Recipe photo
     public Bitmap convert(String img) {
         if (img.equals("null"))
             img = "http://www.catergrab.com/public/images/restaurant-default.png";
