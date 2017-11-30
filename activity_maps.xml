@@ -1,0 +1,70 @@
+<RelativeLayout
+
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent">
+
+
+    <ImageButton
+        android:id="@+id/walmart"
+        android:layout_width="105dp"
+        android:clickable="true"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="#296bba"
+        android:onClick="onClick"
+        android:padding="5dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/walmart" />
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:background="#207427"
+        android:layout_toEndOf="@id/walmart"
+        android:layout_toRightOf="@id/walmart"
+        android:scaleType="centerInside"
+        android:src="@drawable/sobeys"
+        android:padding="5dp"
+        android:clickable="true"
+        android:onClick="onClick"
+        android:id="@+id/sobeys"/>
+
+    <ImageButton
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:background="#df840d"
+        android:layout_toEndOf="@id/sobeys"
+        android:layout_toRightOf="@id/sobeys"
+        android:clickable="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/atlantic"
+        android:onClick="onClick"
+        android:id="@+id/atlantic"/>
+    //image button for the costco
+    <ImageButton
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:background="#c41616"
+        android:clickable="true"
+        android:layout_toEndOf="@id/atlantic"
+        android:layout_toRightOf="@id/atlantic"
+        android:scaleType="centerInside"
+        android:src="@drawable/costco"
+        android:padding="5dp"
+        android:onClick="onClick"
+        android:id="@+id/costco"/>
+
+
+    // this fragment is responsible for the displaying of map json data on the screen
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/graph"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/walmart"
+        />
+
+</RelativeLayout>
