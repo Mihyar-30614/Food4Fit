@@ -2,6 +2,7 @@ package cs.dal.food4fit;
 
 
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -56,34 +57,32 @@ public class TodayFragment extends Fragment {
     View todayview;
     ListView listview;
     Recipe imageitem;
-
+    ProgressDialog progressDialog;
+    final int SECOND_ACTIVITY_RESULT_CODE = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        context = getContext();
-        todayview = inflater.inflate(R.layout.fragment_today, container, false);
-
         View view = inflater.inflate(R.layout.fragment_today, container, false);
 
-        listview = (ListView) view.findViewById(R.id.MealList);
-        FloatingActionButton goCalendar = (FloatingActionButton)view.findViewById(R.id.goCalendar);
-        final int SECOND_ACTIVITY_RESULT_CODE = 0;
+        context = getContext();
+
+        // Define a progress dialog
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Cooking...");
 
 
         mealPlan = new MealPlan(BreakfastList,LunchList,DinnerList);
         meallist = getML(mealPlan);
 
+        retrievedata(getDateString(new Date()));
+
+        listview = (ListView) view.findViewById(R.id.MealList);
         listviewAdapter = new ListViewAdapter(getContext(), meallist);
         listview.setAdapter(listviewAdapter);
-
-        final Date testdate = new Date();
-        retrievedata(getDateString(testdate));
-
-
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -95,10 +94,12 @@ public class TodayFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), RecipeActivity.class);
                     intent.putExtra("imageID", item.getId());
                     startActivity(intent);
+
                 }
             }
         });
 
+        FloatingActionButton goCalendar = (FloatingActionButton)view.findViewById(R.id.goCalendar);
         goCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,10 +110,7 @@ public class TodayFragment extends Fragment {
             }
         });
 
-
-
         return view;
-
 
     }
 
@@ -180,12 +178,6 @@ public class TodayFragment extends Fragment {
         return meallist;
     }
 
-//    private Recipe getRecipe(int imageID){
-//
-//        Bitmap bitmap = BitmapFactory.decodeResource(toolfunction.context.getResources(),imageID);
-//        Recipe imageitem = new Recipe(bitmap,"Image#",imageID);
-//        return imageitem;
-//    }
 
     public static String getDateString(Date date) {
         DateFormat format =  new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH);
@@ -197,6 +189,8 @@ public class TodayFragment extends Fragment {
         FirebaseDatabase firebaseDBInstance = FirebaseDatabase.getInstance();
         DatabaseReference firebaseReference = firebaseDBInstance.getReference("MealCalendar");
 
+        progressDialog.show();
+
         // Attach a listener to read the data at our posts reference
         firebaseReference.child("Grace").child(date).addValueEventListener(new ValueEventListener() {
             @Override
@@ -205,8 +199,6 @@ public class TodayFragment extends Fragment {
                 BreakfastList = new ArrayList<>();
                 LunchList = new ArrayList<>();
                 DinnerList = new ArrayList<>();
-
-
 
                 if(dataSnapshot.getValue()!=null){
 
@@ -223,7 +215,7 @@ public class TodayFragment extends Fragment {
                             @Override
                             public void run() {
                                 SpoonacularAPI spoon = new SpoonacularAPI();
-                                imageitem = spoon.getRecipe(tempID);
+                                imageitem = spoon.getRecipeSimple(tempID);
 
                             }
                         });
@@ -250,10 +242,13 @@ public class TodayFragment extends Fragment {
 
 
                 }
+                progressDialog.dismiss();
                 mealPlan = new MealPlan(BreakfastList,LunchList,DinnerList);
                 meallist = getML(mealPlan);
                 listviewAdapter = new ListViewAdapter(context,meallist);
                 listview.setAdapter(listviewAdapter);
+
+
             }
 
             @Override
@@ -262,21 +257,6 @@ public class TodayFragment extends Fragment {
             }
 
         });
-
-    }
-
-    private Recipe retrieveData(final int tempID) {
-
-//        final Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                SpoonacularAPI spoon = new SpoonacularAPI();
-//                imageitem = spoon.getRecipe(tempID);
-//
-//            }
-//        });
-//        thread.start();
-        return imageitem;
 
     }
 
