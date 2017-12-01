@@ -1,7 +1,9 @@
 package cs.dal.food4fit;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -99,7 +101,8 @@ public class TimerActivity extends AppCompatActivity {
                         progressBar.setProgress(100);
 
                         // Make Phone Vibrate
-
+                        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                        vibrator.vibrate(1000);
                     }
                 }.start();
             }
