@@ -1,6 +1,7 @@
 package cs.dal.food4fit;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -31,6 +32,7 @@ public class ExploreFragment extends Fragment {
     private Context context;
     private ArrayList<Recipe> r = new ArrayList<Recipe>();
     private boolean threadtag= true;
+    ProgressDialog progressDialog;
 
     public ExploreFragment() {
         // Required empty public constructor
@@ -46,6 +48,13 @@ public class ExploreFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_explore, container, false);
 
         super.onCreate(savedInstanceState);
+
+
+        // Define a progress dialog
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Cooking...");
+
         gridView = (GridView) view.findViewById(R.id.gridView);
         gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, r);
         gridView.setAdapter(gridAdapter);
@@ -66,11 +75,13 @@ public class ExploreFragment extends Fragment {
             }
         });
 
+        progressDialog.show();
 
         class load extends AsyncTask<String, Void, String> {
 
             @Override
             protected String doInBackground(String... strings) {
+
                 SpoonacularAPI spoon = new SpoonacularAPI();
                 ArrayList<Recipe> r = spoon.searchRecipe("random");
                 gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, r);
@@ -81,6 +92,7 @@ public class ExploreFragment extends Fragment {
             @Override
             protected void onPostExecute(String result) {
                 gridView.setAdapter(gridAdapter);
+                progressDialog.dismiss();
             }
         }
 
