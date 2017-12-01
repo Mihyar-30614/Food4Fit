@@ -113,17 +113,6 @@ public class RecipeActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        timer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Create intent to choose date
-//                Intent intent = new Intent(RecipeActivity.this, timer.class);
-//                intent.putExtra("Timer", imageitem.getTime());
-//                startActivity(intent);
-
-            }
-        });
     }
 
 }

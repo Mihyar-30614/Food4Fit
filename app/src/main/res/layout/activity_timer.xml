@@ -42,7 +42,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="27dp"
         android:onClick="startTimer"
-        android:text="Start" />
+        android:text="Set" />
 
     <EditText
         android:id="@+id/timer_hours"
@@ -61,22 +61,35 @@
         android:id="@+id/timerViewHours"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:textSize="70dp"
         android:layout_above="@+id/timer_hours"
         android:layout_alignEnd="@+id/timer_hours"
         android:layout_alignRight="@+id/timer_hours"
         android:layout_marginBottom="103dp"
-        android:text="TextView" />
+        android:text="00" />
 
     <TextView
         android:id="@+id/timerViewMinutes"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:textSize="70dp"
         android:layout_alignBaseline="@+id/timerViewHours"
         android:layout_alignBottom="@+id/timerViewHours"
         android:layout_alignEnd="@+id/timer_minutes"
         android:layout_alignRight="@+id/timer_minutes"
         android:layout_marginEnd="33dp"
         android:layout_marginRight="33dp"
-        android:text="TextView" />
+        android:text="00" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="20dp"
+        android:layout_height="100dp"
+        android:textSize="70dp"
+        android:layout_alignTop="@+id/timerViewHours"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=":" />
 
 </RelativeLayout>

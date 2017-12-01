@@ -15,7 +15,7 @@ import android.widget.TextView;
 public class TimerActivity extends AppCompatActivity {
 
     Button timerStart;
-    TextView hours, minutes, viewHours, viewMinutes;
+    TextView hours, minutes, viewHours, viewMinutes;;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,14 +28,18 @@ public class TimerActivity extends AppCompatActivity {
         minutes    = (TextView) findViewById(R.id.timer_minutes);
         viewHours  = (TextView) findViewById(R.id.timerViewHours);
         viewMinutes = (TextView) findViewById(R.id.timerViewMinutes);
-
-        // Set Timer to 00:00
-        hours.setText("00");
-        minutes.setText("00");
     }
 
     // Start Timer
     public void startTimer( View view){
+        // Set Timer to 00:00
+        if (hours.getText().toString().equals("")){
+            hours.setText("00");
+        }
+        if (minutes.getText().toString().equals("")){
+            minutes.setText("00");
+        }
+
         // Get the Values of the timer
         String timerHours   = hours.getText().toString();
         String timerMinutes = minutes.getText().toString();
@@ -49,35 +53,42 @@ public class TimerActivity extends AppCompatActivity {
         int m = Integer.parseInt(timerMinutes);
         final int timer  = (((h*60) + m)*60)*1000;
 
+        timerStart.setText("Start");
+
         // Set a listener
         timerStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                timerStart.setEnabled(false);
                 // Create the countdown timer
                 new CountDownTimer(timer, 60000){
 
                     @Override
                     public void onTick(long millisUntilFinished) {
-                        int min = Integer.parseInt(viewMinutes.getText().toString());
+                       int min = Integer.parseInt(viewMinutes.getText().toString());
                         int hrs = Integer.parseInt(viewHours.getText().toString());
                         if (min - 1 < 0){
                             viewMinutes.setText("59");
                             if (hrs - 1 < 0){
                                 viewHours.setText("00");
                             }else{
-                                viewHours.setText(hrs - 1);
+                                viewHours.setText(Integer.toString(hrs - 1));
                             }
                         }else{
-                            viewMinutes.setText(min - 1);
+                            viewMinutes.setText(Integer.toString(min - 1));
                         }
                     }
 
                     @Override
                     public void onFinish() {
+                        // Reset everything
+                        timerStart.setEnabled(true);
+                        timerStart.setText("Set");
+                        viewMinutes.setText("00");
+                        minutes.setText("00");
 
                     }
-                };
+                }.start();
             }
         });
     }
