@@ -90,10 +90,12 @@ public class ProfileActivity extends AppCompatActivity {
         // Populate Layout with User Info
         profileName.setText(oldName);
         // Populate User Photo
-        if(oldPhotoUrl.equals("null")){
-            oldPhotoUrl = "http://i.imgur.com/FlEXhZo.jpg?1";
+        if (oldPhotoUrl != null){
+            if(oldPhotoUrl.equals("null")){
+                oldPhotoUrl = "http://i.imgur.com/FlEXhZo.jpg?1";
+            }
+            loadProfilePic(oldPhotoUrl);
         }
-        loadProfilePic(oldPhotoUrl);
 
         // Facebook can not change info using app
         if (facebook != null){

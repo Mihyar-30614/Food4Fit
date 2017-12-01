@@ -131,7 +131,8 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
             r.setId(j.getInt("id"));
             JSONArray foodItems = j.getJSONArray("extendedIngredients");
             //for loop access a JSONArray within the JSONObject and creates FoodItem objects
-            for (int i = 0; i < foodItems.length(); i++) {
+            int length = foodItems.length();
+            for (int i = 0; i < length; i++) {
                 JSONObject food = foodItems.getJSONObject(i);
                 FoodItem f = new FoodItem();
                 f.setId(food.getInt("id"));

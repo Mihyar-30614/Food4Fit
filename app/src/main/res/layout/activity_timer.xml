@@ -1,6 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="342dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/circle_shape"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="50"
+        android:progressDrawable="@drawable/circle_bar" />
+
+
+    <EditText
+        android:id="@+id/timer_minutes"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/timer_hours"
+        android:layout_alignBottom="@+id/timer_hours"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="37dp"
+        android:layout_marginRight="37dp"
+        android:baselineAligned="false"
+        android:hint="Minutes"
+        android:inputType="number" />
+
+
+    <Button
+        android:id="@+id/timerStart"
+        android:layout_width="171dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="27dp"
+        android:onClick="startTimer"
+        android:text="Start" />
+
+    <EditText
+        android:id="@+id/timer_hours"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressBar"
+        android:layout_marginEnd="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginTop="20dp"
+        android:layout_toLeftOf="@+id/timer_minutes"
+        android:layout_toStartOf="@+id/timer_minutes"
+        android:hint="Hours"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/timerViewHours"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/timer_hours"
+        android:layout_alignEnd="@+id/timer_hours"
+        android:layout_alignRight="@+id/timer_hours"
+        android:layout_marginBottom="103dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/timerViewMinutes"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignBaseline="@+id/timerViewHours"
+        android:layout_alignBottom="@+id/timerViewHours"
+        android:layout_alignEnd="@+id/timer_minutes"
+        android:layout_alignRight="@+id/timer_minutes"
+        android:layout_marginEnd="33dp"
+        android:layout_marginRight="33dp"
+        android:text="TextView" />
+
+</RelativeLayout>
