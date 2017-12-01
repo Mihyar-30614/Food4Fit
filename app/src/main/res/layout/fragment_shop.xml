@@ -5,50 +5,68 @@
     tools:context="cs.dal.food4fit.ShopFragment">
 
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="right"
-        android:layout_marginTop="11dp"
-        android:contentDescription="nearby_shops"
-        android:onClick="openMap"
-        android:padding="0dp"
-        android:scaleType="fitStart"
-        android:src="@drawable/maps_pic" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Shop all ingredient you need"
-        android:textColor="@color/colorPrimary" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="@string/shopapp"
-        android:textColor="@color/com_facebook_blue"
-        android:shadowColor="@color/com_facebook_blue"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Shop all ingredient you need"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/textitem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:gravity="center"
-        android:textSize="25sp"
-        android:textStyle="italic" />
-    <ImageView
-        android:id="@+id/iv"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/dq" />
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:shadowColor="@color/com_facebook_blue"
+            android:text="@string/shopapp"
+            android:textColor="@color/com_facebook_blue" />
+
+        <ImageView
+            android:id="@+id/iv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dq" />
+
+        <TextView
+            android:id="@+id/textitem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Go grocery now!"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24sp" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="11dp"
+            android:contentDescription="nearby_shops"
+            android:onClick="openMap"
+            android:padding="0dp"
+            android:scaleType="fitStart"
+            android:src="@drawable/maps_pic" />
+    </LinearLayout>
 
 </FrameLayout>

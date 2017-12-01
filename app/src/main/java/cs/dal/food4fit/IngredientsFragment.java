@@ -39,33 +39,15 @@ public class IngredientsFragment extends Fragment {
         String[] splited = foodstring.split("!");
 
         ArrayList<String> foodname = new ArrayList<String>();
-        int[] foodid = new int[splited.length];
 
         for(int i=0;i<splited.length;i++){
             int t =i+1;
-            foodname.add(t+". "+splited[i].split("/")[0]);
-            foodid[i]=Integer.parseInt(splited[i].split("/")[1]);
+            foodname.add(t+". "+splited[i]);
         }
 
         ListView listView1 = (ListView) view.findViewById(R.id.list);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, foodname);
         listView1.setAdapter(adapter);
-
-        listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick (AdapterView< ? > parent, View v, int position, long id){
-
-
-//
-//                    //Create FoodItemActivity
-//                    Intent intent = new Intent(getActivity(), FoodItemActivity.class);
-//                    intent.putExtra("FoodID", foodid);
-//                    startActivity(intent);
-
-            }
-        });
-
-
 
         return view;
     }

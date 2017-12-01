@@ -1,5 +1,6 @@
 package cs.dal.food4fit;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -32,6 +33,7 @@ public class RecipeActivity extends AppCompatActivity {
     private ArrayList<FoodItem> ingredients;
     private String directions = "";
     private String foods = "";
+    private ProgressDialog progressDialog;
 
 
 
@@ -40,47 +42,7 @@ public class RecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe1);
 
-        final int imageID = getIntent().getIntExtra("imageID",0);
-
-        final Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SpoonacularAPI spoon = new SpoonacularAPI();
-                imageitem = spoon.getRecipe(imageID);
-
-            }
-        });
-        thread.start();
-
-        try {
-            Thread.sleep(3000);                 //1000 毫秒，也就是1秒.
-
-        } catch(InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-
-
-        ImageView imageView = (ImageView) findViewById(R.id.headerImage);
-        imageView.setImageBitmap(imageitem.getPhoto());
-
-        ingredients = imageitem.getIngredients();
-        directions = imageitem.getInstructions();
-
-        for(int i = 0; i<ingredients.size();i++){
-            FoodItem foodItem =ingredients.get(i);
-            foods=foods+foodItem.getName()+"/"+foodItem.getId()+"!";
-        }
-
-
-        SharedPreferences sharedRecipe = getSharedPreferences("Recipe", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedRecipe.edit();
-        editor.putString("ing",foods);
-        editor.putString("dir",directions);
-        editor.commit();
-
-
         mRecipePageAdapter = new RecipePageAdapter(getSupportFragmentManager());
-
 
         // Set up the RecipePager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -91,8 +53,30 @@ public class RecipeActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton addMeal = (FloatingActionButton)findViewById(R.id.addmeal);
+        final int imageID = getIntent().getIntExtra("imageID",0);
 
+        final Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SpoonacularAPI spoon = new SpoonacularAPI();
+                imageitem = spoon.getRecipe(imageID);
+            }
+        });
+        thread.start();
+
+        try {
+            Thread.sleep(3000);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+
+
+        ImageView imageView = (ImageView) findViewById(R.id.headerImage);
+        imageView.setImageBitmap(imageitem.getPhoto());
+
+        sharedata();
+
+        FloatingActionButton addMeal = (FloatingActionButton)findViewById(R.id.addmeal);
         addMeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,6 +97,25 @@ public class RecipeActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
+    }
+
+    private void sharedata(){
+
+        ingredients = imageitem.getIngredients();
+        directions = imageitem.getInstructions();
+
+        for(int i = 0; i<ingredients.size();i++){
+            FoodItem foodItem =ingredients.get(i);
+            foods=foods+foodItem.getName()+"!";
+        }
+
+        SharedPreferences sharedRecipe = getSharedPreferences("Recipe", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedRecipe.edit();
+        editor.putString("ing",foods);
+        editor.putString("dir",directions);
+        editor.commit();
     }
 
 }

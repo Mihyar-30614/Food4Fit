@@ -79,12 +79,6 @@ public class MainActivity extends AppCompatActivity {
                     android.support.v4.app.FragmentTransaction exploreTransction = getSupportFragmentManager().beginTransaction();
                     exploreTransction.replace(R.id.content, exploreFragment).commit();
                     return true;
-                case R.id.navigation_cook:
-                    mTextMessage.setText(R.string.title_cook);
-                    CookFragment cookFragment = new CookFragment();
-                    android.support.v4.app.FragmentTransaction cookTransction = getSupportFragmentManager().beginTransaction();
-                    cookTransction.replace(R.id.content, cookFragment).commit();
-                    return true;
                 case R.id.navigation_shop:
                     mTextMessage.setText(R.string.title_shop);
                     ShopFragment shopFragment = new ShopFragment();
