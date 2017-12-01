@@ -1,10 +1,17 @@
 package cs.dal.food4fit;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -100,12 +107,38 @@ public class TimerActivity extends AppCompatActivity {
                         minutes.setText("00");
                         progressBar.setProgress(100);
 
-                        // Make Phone Vibrate
-                        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                        vibrator.vibrate(1000);
+                        // Notification, Vibrate, sound
+                        peep();
                     }
                 }.start();
             }
         });
+    }
+
+    private void peep() {
+        android.support.v4.app.NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.timer)
+                        .setContentTitle("Food4Fit")
+                        .setSubText("Your meal is ready");
+        Intent notificationIntent = new Intent(this, TimerActivity.class);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        builder.setContentIntent(contentIntent);
+        builder.setAutoCancel(true);
+        // Color of the notification LED
+        builder.setLights(Color.GREEN, 500, 500);
+        // Vibrate with these patterns
+        long[] pattern = {500,500,500,500,500,500,500};
+        builder.setVibrate(pattern);
+        builder.setStyle(new NotificationCompat.InboxStyle());
+        // Add the sound
+        Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        builder.setSound(notificationSound);
+        // Push the Notification
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(1, builder.build());
     }
 }
