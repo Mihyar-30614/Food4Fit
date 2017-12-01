@@ -5,6 +5,7 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
@@ -15,7 +16,9 @@ import android.widget.TextView;
 public class TimerActivity extends AppCompatActivity {
 
     Button timerStart;
-    TextView hours, minutes, viewHours, viewMinutes;;
+    TextView hours, minutes, viewHours, viewMinutes;
+    ProgressBar progressBar;
+    int percent = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,7 @@ public class TimerActivity extends AppCompatActivity {
         minutes    = (TextView) findViewById(R.id.timer_minutes);
         viewHours  = (TextView) findViewById(R.id.timerViewHours);
         viewMinutes = (TextView) findViewById(R.id.timerViewMinutes);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
     }
 
     // Start Timer
@@ -39,6 +43,7 @@ public class TimerActivity extends AppCompatActivity {
         if (minutes.getText().toString().equals("")){
             minutes.setText("00");
         }
+        progressBar.setProgress(0);
 
         // Get the Values of the timer
         String timerHours   = hours.getText().toString();
@@ -65,6 +70,11 @@ public class TimerActivity extends AppCompatActivity {
 
                     @Override
                     public void onTick(long millisUntilFinished) {
+                        // Set the percentage
+                        percent += 60000;
+                        int progress = 100/(timer/percent);
+                        progressBar.setProgress(progress);
+
                        int min = Integer.parseInt(viewMinutes.getText().toString());
                         int hrs = Integer.parseInt(viewHours.getText().toString());
                         if (min - 1 < 0){
@@ -86,6 +96,9 @@ public class TimerActivity extends AppCompatActivity {
                         timerStart.setText("Set");
                         viewMinutes.setText("00");
                         minutes.setText("00");
+                        progressBar.setProgress(100);
+
+                        // Make Phone Vibrate
 
                     }
                 }.start();
