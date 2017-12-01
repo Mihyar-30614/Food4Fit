@@ -67,60 +67,62 @@ public class TimerActivity extends AppCompatActivity {
         int m = Integer.parseInt(timerMinutes);
         final int timer  = (((h*60) + m)*60)*1000;
 
-        timerStart.setText("Start");
+        if (h != 0 || m != 0){
+            timerStart.setText("Start");
 
-        // Set a listener
-        timerStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timerStart.setEnabled(false);
-                // Create the countdown timer
-                new CountDownTimer(timer, 60000){
+            // Set a listener
+            timerStart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    timerStart.setEnabled(false);
+                    // Create the countdown timer
+                    new CountDownTimer(timer, 60000){
 
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        // Set the percentage
-                        percent += 60000;
-                        int progress = 100/(timer/percent);
-                        progressBar.setProgress(progress);
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            // Set the percentage
+                            percent += 60000;
+                            int progress = 100/(timer/percent);
+                            progressBar.setProgress(progress);
 
-                       int min = Integer.parseInt(viewMinutes.getText().toString());
-                        int hrs = Integer.parseInt(viewHours.getText().toString());
-                        if (min - 1 < 0){
-                            viewMinutes.setText("59");
-                            if (hrs - 1 < 0){
-                                viewHours.setText("00");
+                            int min = Integer.parseInt(viewMinutes.getText().toString());
+                            int hrs = Integer.parseInt(viewHours.getText().toString());
+                            if (min - 1 < 0){
+                                viewMinutes.setText("59");
+                                if (hrs - 1 < 0){
+                                    viewHours.setText("00");
+                                }else{
+                                    viewHours.setText(Integer.toString(hrs - 1));
+                                }
                             }else{
-                                viewHours.setText(Integer.toString(hrs - 1));
+                                viewMinutes.setText(Integer.toString(min - 1));
                             }
-                        }else{
-                            viewMinutes.setText(Integer.toString(min - 1));
                         }
-                    }
 
-                    @Override
-                    public void onFinish() {
-                        // Reset everything
-                        timerStart.setEnabled(true);
-                        timerStart.setText("Set");
-                        viewMinutes.setText("00");
-                        minutes.setText("00");
-                        progressBar.setProgress(100);
+                        @Override
+                        public void onFinish() {
+                            // Reset everything
+                            timerStart.setEnabled(true);
+                            timerStart.setText("Set");
+                            viewMinutes.setText("00");
+                            minutes.setText("00");
+                            progressBar.setProgress(100);
 
-                        // Notification, Vibrate, sound
-                        peep();
-                    }
-                }.start();
-            }
-        });
+                            // Notification, Vibrate, sound
+                            peep();
+                        }
+                    }.start();
+                }
+            });
+        }
     }
 
     private void peep() {
         android.support.v4.app.NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.timer)
-                        .setContentTitle("Food4Fit")
-                        .setSubText("Your meal is ready");
+                        .setContentTitle("Cooking Timer")
+                        .setContentText("Your meal is ready");
         Intent notificationIntent = new Intent(this, TimerActivity.class);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
