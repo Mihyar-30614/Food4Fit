@@ -82,10 +82,11 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
             JSONObject jsonObj = new JSONObject(result);
             result = "";
             JSONArray jArr = jsonObj.getJSONArray(name);
-            for (int i = 0; i < jArr.length(); i++) {
+            int length = jArr.length();
+            for (int i = 0; i < length; i++) {
                 JSONObject r = jArr.getJSONObject(i);
-                Recipe recipe = generateRecipe(r);
-                recipe = getRecipe(recipe.id);
+                Recipe recipe = generateRecipeSimple(r);
+                recipe = getRecipeSimple(recipe.id);
                 recipeList.add(recipe);
             }
         } catch (final JSONException e) {
@@ -94,19 +95,6 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
         return recipeList;
     }
 
-    /*public FoodItem getFoodItem(int id) {
-        doInBackground("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/ingredients/" + id + "/information");
-        FoodItem f = new FoodItem();
-        f.setId(id);
-        try {
-            JSONObject jsonObj = new JSONObject(result);
-            result = "";
-            f = generateFoodItem(jsonObj);
-        } catch (final JSONException e) {
-            e.printStackTrace();
-        }
-        return f;
-    }*/
 
     //searches for a specific recipe based on a known ID integer
     public Recipe getRecipe(int id) {
@@ -137,9 +125,6 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
                 FoodItem f = new FoodItem();
                 f.setId(food.getInt("id"));
                 f.setName(food.getString("name"));
-                f.setImg(food.getString("image"));
-                f.setPhoto(convert(f.img));
-                f.setQuantity(food.getString("amount") + " " + food.getString("unit"));
                 ingredients.add(f); //ingredients is an ArrayList of FoodItems stored in Recipe
             }
             r.setIngredients(ingredients);
@@ -153,16 +138,35 @@ public class SpoonacularAPI extends AsyncTask<String,Void,Void> {
         return r;
     }
 
-    /*public FoodItem generateFoodItem(JSONObject j) {
-        FoodItem f = new FoodItem();
+    //searches for a specific recipe based on a known ID integer
+    public Recipe getRecipeSimple(int id) {
+        doInBackground("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/" + id + "/information");
+        Recipe r = new Recipe();
         try {
-            f.setName(j.getString("name"));
-            f.setId(j.getInt("id"));
-        } catch (final JSONException e) {
+            JSONObject jsonObj = new JSONObject(result);
+            result = "";
+            r = generateRecipeSimple(jsonObj);
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        return f;
-    }*/
+        return r;
+    }
+
+
+    public Recipe generateRecipeSimple(JSONObject j) {
+        Recipe r = new Recipe();
+        ArrayList<FoodItem> ingredients = new ArrayList<FoodItem>();
+        try {
+            r.setName(j.getString("title"));
+            r.setId(j.getInt("id"));
+            r.setImg(j.getString("image"));
+            r.setPhoto(convert(r.img));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return r;
+    }
+
 
     //passes in an address of a URL and returns a Bitmap for the FoodItem or Recipe photo
     public Bitmap convert(String img) {
