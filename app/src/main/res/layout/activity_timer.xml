@@ -85,11 +85,12 @@
         android:id="@+id/editText2"
         android:layout_width="20dp"
         android:layout_height="100dp"
-        android:textSize="70dp"
         android:layout_alignTop="@+id/timerViewHours"
-        android:layout_centerHorizontal="true"
+        android:layout_toEndOf="@+id/timerViewHours"
+        android:layout_toRightOf="@+id/timerViewHours"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text=":" />
+        android:text=":"
+        android:textSize="70dp" />
 
 </RelativeLayout>
