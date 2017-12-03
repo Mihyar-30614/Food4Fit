@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private GridViewAdapter gridAdapter;
     private Context context;
 
-
+    //show the bottom navigation bar
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
