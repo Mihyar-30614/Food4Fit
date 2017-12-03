@@ -31,21 +31,22 @@ public class DirectionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_directions,container,false);
 
+        //get DirectionsData from RecipeActivity
         SharedPreferences sharedRecipe = getActivity().getSharedPreferences("Recipe", MODE_PRIVATE);
         dir = sharedRecipe.getString("dir","default");
 
-//        TextView tvIngredients = (TextView)view.findViewById(R.id.directionsTab);
-//        tvIngredients.setText(dir);
-
+        //Split Directions into several steps.
         String split[] = dir.split("(?<=[^ ]\\.) (?=[^a-z])");
 
         ArrayList<String> directions = new ArrayList<String>();
 
+        //put directions with step number into directionsArray
         for(int i=0;i<split.length;i++){
             int t =i+1;
             directions.add(t+". "+split[i]);
         }
 
+        //show direction step in the listview
         ListView listView2 = (ListView) view.findViewById(R.id.dirlist);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, directions);
         listView2.setAdapter(adapter);
