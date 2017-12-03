@@ -32,6 +32,7 @@ public class GridViewAdapter extends ArrayAdapter {
         View row = convertView;
         ViewHolder holder = null;
 
+        //initialize the gridview
         if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
@@ -42,7 +43,7 @@ public class GridViewAdapter extends ArrayAdapter {
         } else {
             holder = (ViewHolder) row.getTag();
         }
-
+        //put data from recipe into gridview
         Recipe item = (Recipe) data.get(position);
         holder.imageTitle.setText(item.getName());
         holder.image.setImageBitmap(item.getPhoto());
