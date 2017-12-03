@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,6 +47,7 @@ public class AddMealActivity extends Activity {
     private int day;
 
     private String str;
+    private String userEmail;
 
 
     static final int DATE_DIALOG_ID = 999;
@@ -66,7 +68,7 @@ public class AddMealActivity extends Activity {
         ok = (Button)findViewById(R.id.okay);
 
 
-
+        //initialize the date
         final Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
@@ -78,6 +80,12 @@ public class AddMealActivity extends Activity {
                 .append(month + 1).append("-").append(day).append("-")
                 .append(year));
 
+        //get userinformation
+        SharedPreferences sharedUser = this.getSharedPreferences("Login", MODE_PRIVATE);
+        userEmail = sharedUser.getString("ID","default");
+
+
+        //set up Okay button listener
         ok.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -107,7 +115,7 @@ public class AddMealActivity extends Activity {
         });
 
 
-
+        //setup textview on click listener
         tvDisplayDate.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -161,8 +169,10 @@ public class AddMealActivity extends Activity {
         FirebaseDatabase firebaseDBInstance = FirebaseDatabase.getInstance();
         final DatabaseReference firebaseReference = firebaseDBInstance.getReference("MealCalendar");
 
+
+
         // Attach a listener to read the data at our posts reference
-        firebaseReference.child("Grace").child(datestring).addValueEventListener(new ValueEventListener() {
+        firebaseReference.child(userEmail).child(datestring).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(tag){
@@ -173,15 +183,15 @@ public class AddMealActivity extends Activity {
                         str = dataSnapshot.getValue().toString();
                         if(str != null){
                             if(mealtag.matches("Breakfast")){
-                                firebaseReference.child("Grace").child(datestring).setValue(str+"B."+imageID+"/");
+                                firebaseReference.child(userEmail).child(datestring).setValue(str+"B."+imageID+"/");
 
                             }
                             if(mealtag.matches("Lunch")){
-                                firebaseReference.child("Grace").child(datestring).setValue(str+"L."+imageID+"/");
+                                firebaseReference.child(userEmail).child(datestring).setValue(str+"L."+imageID+"/");
 
                             }
                             if(mealtag.matches("Dinner")){
-                                firebaseReference.child("Grace").child(datestring).setValue(str+"D."+imageID+"/");
+                                firebaseReference.child(userEmail).child(datestring).setValue(str+"D."+imageID+"/");
 
                             }
 
@@ -192,15 +202,15 @@ public class AddMealActivity extends Activity {
 
                         //if there isn't data for the selected date, then just put this mealplan into this date
                         if(mealtag.matches("Breakfast")){
-                            firebaseReference.child("Grace").child(datestring).setValue("B."+imageID+"/");
+                            firebaseReference.child(userEmail).child(datestring).setValue("B."+imageID+"/");
 
                         }
                         if(mealtag.matches("Lunch")){
-                            firebaseReference.child("Grace").child(datestring).setValue("L."+imageID+"/");
+                            firebaseReference.child(userEmail).child(datestring).setValue("L."+imageID+"/");
 
                         }
                         if(mealtag.matches("Dinner")){
-                            firebaseReference.child("Grace").child(datestring).setValue("D."+imageID+"/");
+                            firebaseReference.child(userEmail).child(datestring).setValue("D."+imageID+"/");
 
                         }
                     }
