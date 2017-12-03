@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -35,10 +36,11 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Created by graceliu on 2017-11-19.
  */
 public class TodayFragment extends Fragment {
 
@@ -49,12 +51,10 @@ public class TodayFragment extends Fragment {
     ArrayList<Recipe> BreakfastList = new ArrayList<>();
     ArrayList<Recipe> LunchList = new ArrayList<>();
     ArrayList<Recipe> DinnerList = new ArrayList<>();
-    ListViewAdapter[] listviewAdapterList;
     ArrayList<Object> meallist;
     MealPlan mealPlan;
     ListViewAdapter listviewAdapter;
     Context context;
-    View todayview;
     ListView listview;
     Recipe imageitem;
     ProgressDialog progressDialog;
@@ -74,16 +74,19 @@ public class TodayFragment extends Fragment {
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Cooking...");
 
-
+        //initialize the mealplan data structure
         mealPlan = new MealPlan(BreakfastList,LunchList,DinnerList);
         meallist = getML(mealPlan);
 
+        //retrieve the meal plan data from firebase
         retrievedata(getDateString(new Date()));
 
+        //set listview with the mealplan data
         listview = (ListView) view.findViewById(R.id.MealList);
         listviewAdapter = new ListViewAdapter(getContext(), meallist);
         listview.setAdapter(listviewAdapter);
 
+        //set up recipe list onclick listener
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick (AdapterView< ? > parent, View v, int position, long id){
@@ -99,6 +102,7 @@ public class TodayFragment extends Fragment {
             }
         });
 
+        //set up goCalendar button and listener
         FloatingActionButton goCalendar = (FloatingActionButton)view.findViewById(R.id.goCalendar);
         goCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,9 +139,11 @@ public class TodayFragment extends Fragment {
         }
     }
 
+    //change the data structure into a way where listviewadapter would be able to inflate different views for section header and content.
     private ArrayList<Object> getML(MealPlan mealPlan){
         ArrayList<Object> meallist = new ArrayList<>();
 
+        //if the mealplan is not blank, add section header and read the mealplan
         if(mealPlan!=null&&(mealPlan.getDinnerList()!=null||mealPlan.getLunchList()!=null||mealPlan.getBreakfastList()!=null)) {
 
             ArrayList<Recipe> breakfastlist = mealPlan.getBreakfastList();
@@ -168,6 +174,7 @@ public class TodayFragment extends Fragment {
             }
 
         }
+        //if the mealplan is blank, add section header
         else{
             meallist.add(new String("Breakfast"));
             meallist.add(new String("Lunch"));
@@ -178,12 +185,13 @@ public class TodayFragment extends Fragment {
         return meallist;
     }
 
-
+    //change date format into string format
     public static String getDateString(Date date) {
         DateFormat format =  new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH);
         return format.format(date);
     }
 
+    //retrieve the meal plan data from firebase
     private void retrievedata(String date){
 
         FirebaseDatabase firebaseDBInstance = FirebaseDatabase.getInstance();
@@ -191,8 +199,13 @@ public class TodayFragment extends Fragment {
 
         progressDialog.show();
 
+
+        //get userinformation
+        SharedPreferences sharedUser = getActivity().getSharedPreferences("Login", MODE_PRIVATE);
+        String userEmail = sharedUser.getString("ID","default");
+
         // Attach a listener to read the data at our posts reference
-        firebaseReference.child("Grace").child(date).addValueEventListener(new ValueEventListener() {
+        firebaseReference.child(userEmail).child(date).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
