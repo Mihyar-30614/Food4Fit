@@ -13,6 +13,7 @@ import java.util.List;
 
 public class RecipePageAdapter extends FragmentPagerAdapter{
 
+        //set up directions and ingredients page adapter
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 

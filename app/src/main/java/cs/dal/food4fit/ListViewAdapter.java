@@ -29,6 +29,7 @@ public class ListViewAdapter extends BaseAdapter {
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    //get the type of the list. if it's the listheader then return 1. if it's the recipe then return 0
     public int getItemViewType(int position){
         if(data.get(position)instanceof String){
             return 1;
@@ -58,11 +59,13 @@ public class ListViewAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         switch(getItemViewType(i)){
+            //inflate the sectionheader(Breakfast/Lunch/Dinner)
             case 1:
                 view = inflater.inflate(R.layout.list_item_header,null);
                 TextView header = (TextView) view.findViewById(R.id.header);
                 header.setText(data.get(i).toString());
                 break;
+            //inflate the recipe content
             case 0:
                 view = inflater.inflate(R.layout.list_item_layout,null);
                 Recipe item = (Recipe) data.get(i);

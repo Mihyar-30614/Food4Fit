@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Created by graceliu on 2017-11-19.
  */
 public class ShopFragment extends Fragment {
     ImageView iv;

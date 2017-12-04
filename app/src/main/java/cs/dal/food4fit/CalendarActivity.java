@@ -26,11 +26,13 @@ public class CalendarActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
+        //initialize the calendar activity
         final Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
 
+        //show calendarDialog
         showDialog(DATE_DIALOG_ID);
 
     }
@@ -50,13 +52,14 @@ public class CalendarActivity extends Activity {
     private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 
         public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
-
+            //get selected date
             year = selectedYear;
             month = selectedMonth+1;
             day = selectedDay;
 
             String datestring = month+"-"+day+"-"+year;
 
+            //return the selected date
             Intent mIntent = new Intent();
             mIntent.putExtra("dateString", datestring);
             setResult(RESULT_OK, mIntent);

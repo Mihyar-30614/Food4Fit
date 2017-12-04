@@ -53,8 +53,10 @@ public class RecipeActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        //get the chosen RecipeID from the previous view
         final int imageID = getIntent().getIntExtra("imageID",0);
 
+        //get Recipe data from Spoonacular API using unique ID
         final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -64,18 +66,21 @@ public class RecipeActivity extends AppCompatActivity {
         });
         thread.start();
 
+        //wait until recipe data has been retrieved.
         try {
             Thread.sleep(3000);
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
 
-
+        //set the Recipe image
         ImageView imageView = (ImageView) findViewById(R.id.headerImage);
         imageView.setImageBitmap(imageitem.getPhoto());
 
+        //put the selected recipe information to sharepreference so that the section adapter would get these information
         sharedata();
 
+        //set up addmeal button and listener
         FloatingActionButton addMeal = (FloatingActionButton)findViewById(R.id.addmeal);
         addMeal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +93,7 @@ public class RecipeActivity extends AppCompatActivity {
             }
         });
 
+        //set up timer button and listener
         FloatingActionButton timer = (FloatingActionButton)findViewById(R.id.timer);
         timer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +107,7 @@ public class RecipeActivity extends AppCompatActivity {
 
     }
 
+    //put the selected recipe information to sharepreference so that the section adapter would get these information
     private void sharedata(){
 
         ingredients = imageitem.getIngredients();

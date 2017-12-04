@@ -34,17 +34,21 @@ public class IngredientsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ingredients,container,false);
 
+        //get IngredientsData from RecipeActivity
         SharedPreferences sharedRecipe = getActivity().getSharedPreferences("Recipe", MODE_PRIVATE);
         foodstring = sharedRecipe.getString("ing","default");
         String[] splited = foodstring.split("!");
 
+        //Split ingredients into foodArray.
         ArrayList<String> foodname = new ArrayList<String>();
 
+        //put ingredients with food number into ingredients
         for(int i=0;i<splited.length;i++){
             int t =i+1;
             foodname.add(t+". "+splited[i]);
         }
 
+        //show ingredients steps in the listview
         ListView listView1 = (ListView) view.findViewById(R.id.list);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, foodname);
         listView1.setAdapter(adapter);
