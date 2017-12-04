@@ -110,7 +110,6 @@ public class TodayFragment extends Fragment {
                 //Create intent to choose date
                 Intent intent = new Intent(getActivity(), CalendarActivity.class);
                 startActivityForResult(intent,SECOND_ACTIVITY_RESULT_CODE);
-
             }
         });
 

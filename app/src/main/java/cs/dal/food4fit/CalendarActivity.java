@@ -4,6 +4,7 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.DatePicker;
@@ -43,8 +44,11 @@ public class CalendarActivity extends Activity {
         switch (id) {
             case DATE_DIALOG_ID:
                 // set date picker as current date
-                return new DatePickerDialog(this, datePickerListener,
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this, datePickerListener,
                         year, month,day);
+                // Set a Cancel listener
+                datePickerDialog.setOnCancelListener(cancelListener);
+                return datePickerDialog;
         }
         return null;
     }
@@ -69,4 +73,11 @@ public class CalendarActivity extends Activity {
         }
     };
 
+    // Cancel listener to Kill the black page
+    private DatePickerDialog.OnCancelListener cancelListener = new DatePickerDialog.OnCancelListener() {
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            finish();
+        }
+    };
 }
